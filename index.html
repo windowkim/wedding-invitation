@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#474a37" />
+    <title>모바일 청첩장</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="section hero-section reveal" id="hero">
+        <div class="hero-media" id="heroMedia"></div>
+        <div class="hero-overlay">
+          <p class="hero-kicker" id="heroKicker">Wedding Invitation</p>
+          <h1 class="hero-title" id="heroTitle"></h1>
+          <p class="hero-meta" id="heroMeta"></p>
+        </div>
+        <button class="scroll-indicator" type="button" data-scroll-target="#invitationSection" aria-label="다음 섹션으로 이동">
+          <span>Scroll</span>
+          <span class="scroll-indicator__arrow">⌄</span>
+        </button>
+      </header>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section invitation-section reveal" id="invitationSection">
+        <div class="section-heading">
+          <p class="section-label">Invitation</p>
+          <h2>초대합니다</h2>
+        </div>
+        <article class="glass-card invitation-card">
+          <div class="invitation-stars" aria-hidden="true">✦ ✦ ✦</div>
+          <p class="family-line" id="familyLineGroom"></p>
+          <p class="family-line" id="familyLineBride"></p>
+          <div class="invitation-message" id="invitationMessage"></div>
+          <p class="signature" id="invitationSignature"></p>
+        </article>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="contactSection">
+        <div class="section-heading">
+          <p class="section-label">Contact</p>
+          <h2>연락처</h2>
+        </div>
+        <div class="contact-preview glass-card">
+          <p class="section-copy">
+            양가에 직접 연락하실 수 있도록 연락처를 한 곳에 모았습니다.
+          </p>
+          <div class="dual-badges">
+            <span id="contactBadgeGroom">신랑측</span>
+            <span id="contactBadgeBride">신부측</span>
+          </div>
+          <button class="primary-button" id="openContactModal" type="button">연락하기</button>
+        </div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="gallerySection">
+        <div class="section-heading">
+          <p class="section-label">Gallery</p>
+          <h2>포토 갤러리</h2>
+        </div>
+        <div class="gallery-track" id="galleryTrack"></div>
+        <div class="gallery-dots" id="galleryDots" aria-hidden="true"></div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="scheduleSection">
+        <div class="section-heading">
+          <p class="section-label">Schedule</p>
+          <h2>날짜 &amp; 카운트다운</h2>
+        </div>
+        <article class="glass-card countdown-card">
+          <p class="countdown-message" id="countdownMessage"></p>
+          <p class="countdown-live" id="countdownLive"></p>
+          <div class="calendar-card">
+            <div class="calendar-header">
+              <div>
+                <p class="calendar-label">Calendar</p>
+                <h3 id="calendarTitle"></h3>
+              </div>
+              <p class="calendar-helper" id="calendarHelper"></p>
+            </div>
+            <div class="calendar-weekdays" id="calendarWeekdays"></div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </div>
+        </article>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="locationSection">
+        <div class="section-heading">
+          <p class="section-label">Location</p>
+          <h2>오시는 길</h2>
+        </div>
+        <article class="glass-card location-card">
+          <div class="map-frame" id="mapFrame"></div>
+          <div class="location-copy">
+            <h3 id="venueName"></h3>
+            <p id="venueAddress"></p>
+          </div>
+          <div class="action-row">
+            <a class="primary-button" id="naverMapLink" href="#" target="_blank" rel="noreferrer">네이버 지도</a>
+            <a class="secondary-button" id="kakaoMapLink" href="#" target="_blank" rel="noreferrer">카카오 지도</a>
+          </div>
+          <a class="route-button" id="routeButton" href="#" target="_blank" rel="noreferrer">길찾기</a>
+          <div class="info-list">
+            <div>
+              <h4>주차 안내</h4>
+              <p id="parkingInfo"></p>
+            </div>
+            <div>
+              <h4>대중교통</h4>
+              <p id="transportInfo"></p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="venueGuideSection">
+        <div class="section-heading">
+          <p class="section-label">Venue Guide</p>
+          <h2>예식장 안내</h2>
+        </div>
+        <div class="guide-grid" id="guideGrid"></div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="accountSection">
+        <div class="section-heading">
+          <p class="section-label">Account</p>
+          <h2>축의금 계좌</h2>
+        </div>
+        <div class="accordion-list" id="accountAccordion"></div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="rsvpSection">
+        <div class="section-heading">
+          <p class="section-label">RSVP</p>
+          <h2>참석 여부</h2>
+        </div>
+        <article class="glass-card rsvp-preview">
+          <p class="section-copy">
+            참석 여부를 미리 알려주시면 더 정성껏 준비하겠습니다.
+          </p>
+          <button class="primary-button" id="openRsvpModal" type="button">참석 의사 전달하기</button>
+        </article>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <section class="section reveal" id="guestbookSection">
+        <div class="section-heading">
+          <p class="section-label">Guestbook</p>
+          <h2>축하 메시지</h2>
+        </div>
+        <article class="glass-card guestbook-form-card">
+          <form id="guestbookForm" novalidate>
+            <label class="field-label" for="guestbookAuthor">이름</label>
+            <input class="text-input" id="guestbookAuthor" name="author" type="text" placeholder="성함을 입력해 주세요" required />
+
+            <label class="field-label" for="guestbookContent">메시지</label>
+            <textarea
+              class="text-input text-area"
+              id="guestbookContent"
+              name="content"
+              rows="4"
+              placeholder="따뜻한 축하 메시지를 남겨 주세요"
+              required
+            ></textarea>
+
+            <button class="primary-button" type="submit">메시지 남기기</button>
+          </form>
+        </article>
+        <div class="guestbook-grid" id="guestbookGrid"></div>
+        <div class="empty-state" id="guestbookEmptyState">첫 번째 축하 메시지를 남겨 주세요.</div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true">✦</div>
+
+      <footer class="section footer-section reveal" id="footerSection">
+        <div class="section-heading">
+          <p class="section-label">Share</p>
+          <h2>함께 전해주세요</h2>
+        </div>
+        <div class="footer-actions">
+          <button class="primary-button" id="shareButton" type="button">카카오톡 공유</button>
+          <button class="secondary-button" id="copyLinkButton" type="button">링크 복사</button>
+        </div>
+        <p class="footer-copy" id="footerCopy"></p>
+      </footer>
+    </div>
+
+    <div class="modal-overlay" id="contactModal" aria-hidden="true">
+      <div class="modal-panel contact-modal-panel" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+        <button class="modal-close" type="button" data-close-modal="#contactModal" aria-label="닫기">×</button>
+        <div class="modal-dots" aria-hidden="true"></div>
+        <h3 id="contactModalTitle">연락처</h3>
+        <div class="contact-columns" id="contactColumns"></div>
+      </div>
+    </div>
+
+    <div class="modal-overlay bottom-sheet-overlay" id="rsvpModal" aria-hidden="true">
+      <div class="modal-panel bottom-sheet" role="dialog" aria-modal="true" aria-labelledby="rsvpModalTitle">
+        <button class="modal-close" type="button" data-close-modal="#rsvpModal" aria-label="닫기">×</button>
+        <h3 id="rsvpModalTitle">참석 의사 전달하기</h3>
+        <form id="rsvpForm" novalidate>
+          <div class="field-group">
+            <span class="field-label">구분</span>
+            <div class="toggle-group" id="sideToggleGroup">
+              <button class="toggle-button is-selected" type="button" data-side="신랑측">신랑측</button>
+              <button class="toggle-button" type="button" data-side="신부측">신부측</button>
+            </div>
+            <input id="rsvpSide" name="side" type="hidden" value="신랑측" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rsvpName">성함</label>
+            <input class="text-input" id="rsvpName" name="name" type="text" placeholder="성함을 입력해 주세요" required />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rsvpPhone">연락처</label>
+            <input class="text-input" id="rsvpPhone" name="phone" type="tel" placeholder="연락 가능한 번호를 입력해 주세요" required />
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">참석 여부</span>
+            <div class="choice-row" id="attendanceChoices">
+              <label class="choice-pill">
+                <input type="radio" name="attendance" value="참석" required />
+                <span>참석</span>
+              </label>
+              <label class="choice-pill">
+                <input type="radio" name="attendance" value="불참석" />
+                <span>불참석</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rsvpGuestCount">참석인원</label>
+            <input
+              class="text-input"
+              id="rsvpGuestCount"
+              name="guest_count"
+              type="number"
+              min="1"
+              placeholder="본인 포함 총 참석인원"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rsvpCompanion">동행인</label>
+            <input
+              class="text-input"
+              id="rsvpCompanion"
+              name="companions"
+              type="text"
+              placeholder="함께 오시는 분 성함"
+            />
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">식사 여부</span>
+            <div class="choice-row meal-choices" id="mealChoices">
+              <label class="choice-pill">
+                <input type="radio" name="meal_preference" value="예정" required />
+                <span>예정</span>
+              </label>
+              <label class="choice-pill">
+                <input type="radio" name="meal_preference" value="안함" />
+                <span>안함</span>
+              </label>
+              <label class="choice-pill">
+                <input type="radio" name="meal_preference" value="미정" />
+                <span>미정</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rsvpMessage">전하실 말씀</label>
+            <textarea
+              class="text-input text-area"
+              id="rsvpMessage"
+              name="message"
+              rows="3"
+              placeholder="남기실 말씀이 있다면 입력해 주세요"
+            ></textarea>
+          </div>
+
+          <label class="checkbox-row">
+            <input id="hideRsvpToday" type="checkbox" />
+            <span>오늘 하루 보지 않기</span>
+          </label>
+
+          <button class="primary-button" type="submit">참석 의사 전달하기</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
