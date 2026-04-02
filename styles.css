@@ -231,10 +231,38 @@ iframe {
 
 .invitation-message {
   margin-top: 22px;
+  display: grid;
+  gap: 22px;
 }
 
-.invitation-message p {
+.invitation-message__body p {
   margin: 0 0 12px;
+}
+
+.invitation-message__body p:last-child,
+.invitation-message__verse p:last-child {
+  margin-bottom: 0;
+}
+
+.invitation-message__verse {
+  padding: 18px 16px;
+  border-radius: 20px;
+  background: rgba(20, 20, 18, 0.18);
+  border: 1px solid rgba(216, 229, 146, 0.14);
+  text-align: left;
+}
+
+.invitation-message__verse p {
+  margin: 0 0 12px;
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+
+.invitation-message__reference {
+  margin-top: 16px;
+  color: var(--accent-strong);
+  font-family: 'Gowun Batang', serif;
+  text-align: right;
 }
 
 .signature {
@@ -532,6 +560,10 @@ iframe {
 .info-list p,
 .footer-copy {
   margin: 0;
+}
+
+.info-list p {
+  white-space: pre-line;
 }
 
 .guide-grid {

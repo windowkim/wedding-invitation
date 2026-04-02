@@ -1,55 +1,68 @@
 const CONFIG = {
   site: {
-    title: '<신랑이름> · <신부이름> 모바일 청첩장',
+    title: '김창욱 · 한진주 모바일 청첩장',
     heroImage: '/images/hero.jpg',
     heroKicker: 'Wedding Invitation',
   },
   colors: {
-    background: '#474a37',
-    accent: '#d8e592',
-    accentSoft: 'rgba(216, 229, 146, 0.18)',
+    background: '#537551',
+    accent: '#d07ca6',
+    accentSoft: 'rgba(205, 148, 177, 0.18)',
     contactButtonBackground: '<배경색깔>',
   },
   couple: {
     groom: {
-      name: '<신랑이름>',
-      father: '<신랑아버지>',
-      mother: '<신랑어머니>',
+      name: '김창욱',
+      father: '김준식',
+      mother: '방은정',
     },
     bride: {
-      name: '<신부이름>',
-      father: '<신부아버지>',
-      mother: '<신부어머니>',
+      name: '한진주',
+      father: '한상우',
+      mother: '유은영',
     },
   },
   invitation: {
-    line1: '오랜 시간 걸음 지키며 서로의 하루가 되어주었습니다.',
-    line2: '이제 부부라는 이름으로 같은 방향을 걸어가려 합니다.',
-    line3: '이 뜻깊은 시작의 자리에 소중한 분들을 정중히 초대합니다.',
+    messageLines: [
+      '같은 믿음 안에서 만나',
+      '같은 캠퍼스에서 꿈을 품고 걸어오며',
+      '서로의 하루를 응원해 준 두 사람이',
+      '이제 평생을 함께하기로 약속합니다.',
+      '하나님 앞에서 맺는 이 소중한 언약의 자리에',
+      '귀한 여러분을 정중히 초대합니다.',
+      '오셔서 따뜻한 축복으로 함께해 주시면 감사하겠습니다.',
+    ],
+    verseLines: [
+      '두 사람이 한 사람보다 나음은 그들이 수고함으로 좋은 상을 얻을 것임이라',
+      '혹시 그들이 넘어지면 하나가 그 동무를 붙들어 일으키려니와 홀로 있어 넘어지고 붙들어 일으킬 자가 없는 자에게는 화가 있으리라',
+      '또 두 사람이 함께 누우면 따뜻하거니와 한 사람이면 어찌 따뜻하랴',
+      '한 사람이면 패하겠거니와 두 사람이면 맞설 수 있나니 세 겹 줄은 쉽게 끊어지지 아니하느니라',
+    ],
+    verseReference: '전도서 4장 9-12절',
   },
   wedding: {
-    displayDate: '<결혼날짜>',
-    year: '<몇년>',
-    month: '<몇달>',
-    day: '<며칠>',
-    hour: '<몇시>',
+    displayDate: '2026년 8월 29일 토요일 오후 3시',
+    year: '2026',
+    month: '8',
+    day: '29',
+    hour: '15',
     minute: '00',
-    venueName: '<예식장 이름>',
-    address: '<식장 주소>',
+    venueName: '웨스턴팰리스웨딩 6층 팰리스홀',
+    address: '인천광역시 부평구 부평대로278번길 16',
   },
   contact: {
     groomSideLabel: '신랑측',
     brideSideLabel: '신부측',
     people: {
       groom: [
-        { relation: '신랑', name: '<신랑이름>', phone: '<신랑 전화번호>' },
-        { relation: '신랑 아버지', name: '<신랑아버지>', phone: '<신랑아버지 전화번호>' },
-        { relation: '신랑 어머니', name: '<신랑어머니>', phone: '<신랑어머니 전화번호>' },
+        { relation: '신랑', name: '김창욱', phone: '010-9904-8791' },
+        { relation: '신랑 아버지', name: '김준식', phone: '010-6730-8791' },
+        { relation: '신랑 어머니', name: '방은정', phone: '010-2629-8791' },
       ],
       bride: [
-        { relation: '신부', name: '<신부이름>', phone: '<신부 전화번호>' },
-        { relation: '신부 아버지', name: '<신부아버지>', phone: '<신부아버지 전화번호>' },
-        { relation: '신부 어머니', name: '<신부어머니>', phone: '<신부어머니 전화번호>' },
+        { relation: '신부', name: '한진주', phone: '010-9294-9665' },
+        { relation: '신부 아버지', name: '한상우', phone: '010-4253-9665' },
+        { relation: '신부 어머니', name: '유은영', phone: '010-7673-0221' },
       ],
     },
   },
@@ -63,13 +76,15 @@ const CONFIG = {
   location: {
     embedUrl: '<카카오맵 임베드 URL>',
     fallbackImage: '/images/약도.jpg',
-    address: '<식장 주소>',
+    address: '인천광역시 부평구 부평대로278번길 16',
     naverMapUrl: '<네이버지도 링크>',
     kakaoMapUrl: '<카카오맵 링크>',
     routeUrl: '<길찾기 링크>',
-    parking: '<주차 안내>',
-    subway: '<지하철 안내>',
-    bus: '<버스 안내>',
+    parking: '부평우림 라이온스밸리 3시간 무료 (인천시 부평구 부평대로 283), 지하 2층 A동 기둥번호(A05) 주변 주차 후 갈산역 만남의광장 이동 후 갈산역 2번 출구로 나오세요.(에스컬레이터)',
+    subway: '인천지하철 갈산역 2번 출구로 나오세요.',
+    bus: '포항 ',
+    charterBus:
+      '포항 -> 인천\n -출발 시간 및 장소: 9시 20분 효자교회 주차장, 9시 30분 포항공과대학교 C5 앞\n\n인천 -> 포항\n -출발 시간 및 장소: 18시 예식장 1층',
   },
   venueGuide: {
     items: [
@@ -82,10 +97,14 @@ const CONFIG = {
     groomSideLabel: '신랑측 계좌',
     brideSideLabel: '신부측 계좌',
     groom: [
-      { holder: '<예금주 이름>', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '김창욱', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '김준식', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '방은정', bank: '<은행명>', number: '<계좌 정보>' },
     ],
     bride: [
-      { holder: '<예금주 이름>', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '한진주', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '한상우', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '유은영', bank: '<은행명>', number: '<계좌 정보>' },
     ],
   },
   rsvp: {
@@ -101,8 +120,8 @@ const CONFIG = {
   },
   footer: {
     copy: '소중한 분들과 이 페이지를 함께 나눠 주세요.',
-    shareTitle: '<신랑이름> · <신부이름> 결혼식에 초대합니다',
-    shareText: '<신랑이름> · <신부이름>의 모바일 청첩장을 공유합니다.',
+    shareTitle: '김창욱 · 한진주 결혼식에 초대합니다',
+    shareText: '김창욱 · 한진주의 모바일 청첩장을 공유합니다.',
   },
 };
 
@@ -208,10 +227,16 @@ function renderInvitation() {
   const invitationSignature = document.getElementById('invitationSignature');
 
   familyLineGroom.textContent = `${CONFIG.couple.groom.father}·${CONFIG.couple.groom.mother}의 장남 ${CONFIG.couple.groom.name}`;
-  familyLineBride.textContent = `${CONFIG.couple.bride.father}·${CONFIG.couple.bride.mother}의 장녀 ${CONFIG.couple.bride.name}`;
-  invitationMessage.innerHTML = [CONFIG.invitation.line1, CONFIG.invitation.line2, CONFIG.invitation.line3]
-    .map((line) => `<p>${escapeHtml(line)}</p>`)
-    .join('');
+  familyLineBride.textContent = `${CONFIG.couple.bride.father}·${CONFIG.couple.bride.mother}의 차녀 ${CONFIG.couple.bride.name}`;
+  invitationMessage.innerHTML = `
+    <div class="invitation-message__body">
+      ${CONFIG.invitation.messageLines.map((line) => `<p>${escapeHtml(line)}</p>`).join('')}
+    </div>
+    <div class="invitation-message__verse">
+      ${CONFIG.invitation.verseLines.map((line) => `<p>${escapeHtml(line)}</p>`).join('')}
+      <p class="invitation-message__reference">${escapeHtml(CONFIG.invitation.verseReference)}</p>
+    </div>
+  `;
   invitationSignature.textContent = `${CONFIG.couple.groom.name}·${CONFIG.couple.bride.name} 드림`;
 }
 
@@ -365,6 +390,7 @@ function renderLocation() {
   const venueAddress = document.getElementById('venueAddress');
   const parkingInfo = document.getElementById('parkingInfo');
   const transportInfo = document.getElementById('transportInfo');
+  const charterBusInfo = document.getElementById('charterBusInfo');
   const linkIds = ['naverMapLink', 'kakaoMapLink', 'routeButton'];
   const linkValues = [CONFIG.location.naverMapUrl, CONFIG.location.kakaoMapUrl, CONFIG.location.routeUrl];
 
@@ -372,6 +398,7 @@ function renderLocation() {
   venueAddress.textContent = CONFIG.location.address;
   parkingInfo.textContent = CONFIG.location.parking;
   transportInfo.textContent = [CONFIG.location.subway, CONFIG.location.bus].filter(Boolean).join(' / ');
+  charterBusInfo.textContent = CONFIG.location.charterBus;
 
   if (isPlaceholderValue(CONFIG.location.embedUrl)) {
     mapFrame.innerHTML = `
