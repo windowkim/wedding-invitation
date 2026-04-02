@@ -262,6 +262,7 @@ function renderContacts() {
           <div class="contact-person">
             <strong>${escapeHtml(person.relation)}</strong>
             <p>${escapeHtml(person.name)}</p>
+            <p class="contact-number">${escapeHtml(person.phone)}</p>
             <div class="contact-actions">
               <a class="icon-button ${isDisabled ? 'is-disabled' : ''}" href="${telHref}" aria-label="전화">☎</a>
               <a class="icon-button ${isDisabled ? 'is-disabled' : ''}" href="${smsHref}" aria-label="문자">✉</a>
@@ -445,7 +446,7 @@ function renderAccounts() {
   ];
 
   accordion.innerHTML = groups
-    .map((group, groupIndex) => {
+    .map((group) => {
       const rows = CONFIG.accounts[group.key]
         .map(
           (account, index) => `
@@ -460,10 +461,10 @@ function renderAccounts() {
         .join('');
 
       return `
-        <article class="accordion-item ${groupIndex === 0 ? 'is-open' : ''}">
+        <article class="accordion-item">
           <button class="accordion-trigger" type="button">
             <span>${escapeHtml(group.label)}</span>
-            <span>${groupIndex === 0 ? '−' : '+'}</span>
+            <span>+</span>
           </button>
           <div class="accordion-panel">${rows}</div>
         </article>

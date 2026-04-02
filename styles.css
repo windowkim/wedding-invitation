@@ -932,6 +932,12 @@ iframe {
   font-size: 0.94rem;
 }
 
+.contact-number {
+  color: var(--accent-strong);
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
 .contact-actions {
   display: flex;
   gap: 8px;
