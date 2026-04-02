@@ -166,6 +166,22 @@ function safeColor(value, fallback) {
   return value;
 }
 
+function resolveAssetUrl(value) {
+  if (!value || isPlaceholderValue(value)) {
+    return value;
+  }
+
+  if (/^https?:\/\//i.test(value)) {
+    return value;
+  }
+
+  if (value.startsWith('/')) {
+    return new URL(value.replace(/^\//, ''), CONFIG.site.publicUrl).toString();
+  }
+
+  return value;
+}
+
 function getWeddingDate() {
   const { year, month, day, hour, minute } = CONFIG.wedding;
   const parts = [year, month, day, hour, minute].map((part) => Number(part));
@@ -199,7 +215,7 @@ function createImageMarkup(src, alt, label, className = '') {
     return `<div class="image-placeholder ${className}" data-label="${escapeHtml(label)}"></div>`;
   }
 
-  return `<img class="${className}" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
+  return `<img class="${className}" src="${escapeHtml(resolveAssetUrl(src))}" alt="${escapeHtml(alt)}" loading="lazy" />`;
 }
 
 function renderHero() {
@@ -213,7 +229,8 @@ function renderHero() {
   const heroMeta = document.getElementById('heroMeta');
   const heroKicker = document.getElementById('heroKicker');
 
-  heroMedia.style.setProperty('--hero-image', `url('${CONFIG.site.heroImage}')`);
+  const heroImageUrl = resolveAssetUrl(CONFIG.site.heroImage);
+  heroMedia.style.setProperty('--hero-image', `url('${heroImageUrl}')`);
   heroTitle.textContent = `${CONFIG.couple.groom.name} · ${CONFIG.couple.bride.name}`;
   heroMeta.innerHTML = `${escapeHtml(CONFIG.wedding.displayDate)}<br />${escapeHtml(CONFIG.wedding.venueName)}`;
   heroKicker.textContent = CONFIG.site.heroKicker;
@@ -222,7 +239,7 @@ function renderHero() {
   heroImage.onerror = () => {
     heroMedia.style.setProperty('--hero-image', 'none');
   };
-  heroImage.src = CONFIG.site.heroImage;
+  heroImage.src = heroImageUrl;
 }
 
 function renderInvitation() {
