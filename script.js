@@ -2,8 +2,8 @@ const CONFIG = {
   site: {
     title: '김창욱 · 한진주 모바일 청첩장',
     publicUrl: 'https://windowkim.github.io/wedding-invitation/',
-    heroImage: '/images/hero.jpg',
-    shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/hero.jpg',
+    heroImage: '/images/main.jpg',
+    shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/main.jpg',
     heroKicker: 'Wedding Invitation',
   },
   kakao: {
