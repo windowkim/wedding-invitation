@@ -80,14 +80,15 @@ const CONFIG = {
   },
   location: {
     embedUrl: '<카카오맵 임베드 URL>',
-    fallbackImage: '/images/약도.jpg',
+    fallbackImage: '/images/map.jpg',
+    parkingImage: '/images/map-parking.jpg',
     address: '인천광역시 부평구 부평대로278번길 16',
     naverMapUrl: 'https://naver.me/GJZ3adD7',
     kakaoMapUrl: 'https://kko.to/DD8O3ZE7Yw',
     routeUrl: 'https://kko.to/DD8O3ZE7Yw',
     parking: '부평우림 라이온스밸리 3시간 무료 (인천시 부평구 부평대로 283), 지하 2층 A동 기둥번호(A05) 주변 주차 후 갈산역 만남의광장 이동 후 갈산역 2번 출구로 나오세요.(에스컬레이터)',
     subway: '인천지하철 갈산역 2번 출구로 나오세요.',
-    bus: '포항 ',
+    bus: ' ',
     charterBus:
       '포항 -> 인천\n -출발 시간 및 장소: 9시 20분 효자교회 주차장, 9시 30분 포항공과대학교 C5 앞\n\n인천 -> 포항\n -출발 시간 및 장소: 18시 예식장 1층',
   },
@@ -248,8 +249,12 @@ function renderInvitation() {
   const invitationMessage = document.getElementById('invitationMessage');
   const invitationSignature = document.getElementById('invitationSignature');
 
-  familyLineGroom.textContent = `${CONFIG.couple.groom.father}·${CONFIG.couple.groom.mother}의 장남 ${CONFIG.couple.groom.name}`;
-  familyLineBride.textContent = `${CONFIG.couple.bride.father}·${CONFIG.couple.bride.mother}의 차녀 ${CONFIG.couple.bride.name}`;
+  familyLineGroom.innerHTML = `
+    <strong>${escapeHtml(CONFIG.couple.groom.father)}·${escapeHtml(CONFIG.couple.groom.mother)}</strong><span>의 장남</span><strong>${escapeHtml(CONFIG.couple.groom.name)}</strong>
+  `;
+  familyLineBride.innerHTML = `
+    <strong>${escapeHtml(CONFIG.couple.bride.father)}·${escapeHtml(CONFIG.couple.bride.mother)}</strong><span>의 차녀</span><strong>${escapeHtml(CONFIG.couple.bride.name)}</strong>
+  `;
   invitationMessage.innerHTML = `
     <div class="invitation-message__body">
       ${CONFIG.invitation.messageLines.map((line) => `<p>${escapeHtml(line)}</p>`).join('')}
@@ -411,6 +416,7 @@ function renderLocation() {
   const mapFrame = document.getElementById('mapFrame');
   const venueName = document.getElementById('venueName');
   const venueAddress = document.getElementById('venueAddress');
+  const parkingImage = document.getElementById('parkingImage');
   const parkingInfo = document.getElementById('parkingInfo');
   const transportInfo = document.getElementById('transportInfo');
   const charterBusInfo = document.getElementById('charterBusInfo');
@@ -419,6 +425,7 @@ function renderLocation() {
 
   venueName.textContent = CONFIG.wedding.venueName;
   venueAddress.textContent = CONFIG.location.address;
+  parkingImage.innerHTML = createImageMarkup(CONFIG.location.parkingImage, '주차 안내 이미지', '주차 안내 이미지를 추가하면 표시됩니다.');
   parkingInfo.textContent = CONFIG.location.parking;
   transportInfo.textContent = [CONFIG.location.subway, CONFIG.location.bus].filter(Boolean).join(' / ');
   charterBusInfo.textContent = CONFIG.location.charterBus;
