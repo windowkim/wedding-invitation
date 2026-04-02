@@ -1,8 +1,13 @@
 const CONFIG = {
   site: {
     title: '김창욱 · 한진주 모바일 청첩장',
+    publicUrl: 'https://windowkim.github.io/wedding-invitation/',
     heroImage: '/images/hero.jpg',
+    shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/hero.jpg',
     heroKicker: 'Wedding Invitation',
+  },
+  kakao: {
+    javascriptKey: 'f6d0f3d1014d5ee4dcec9f03394e8b92',
   },
   colors: {
     background: '#537551',
@@ -47,7 +52,7 @@ const CONFIG = {
     day: '29',
     hour: '15',
     minute: '00',
-    venueName: '웨스턴팰리스웨딩 6층 팰리스홀',
+    venueName: '인천 웨스턴팰리스웨딩 6층 팰리스홀',
     address: '인천광역시 부평구 부평대로278번길 16',
   },
   contact: {
@@ -77,9 +82,9 @@ const CONFIG = {
     embedUrl: '<카카오맵 임베드 URL>',
     fallbackImage: '/images/약도.jpg',
     address: '인천광역시 부평구 부평대로278번길 16',
-    naverMapUrl: '<네이버지도 링크>',
-    kakaoMapUrl: '<카카오맵 링크>',
-    routeUrl: '<길찾기 링크>',
+    naverMapUrl: 'https://naver.me/GJZ3adD7',
+    kakaoMapUrl: 'https://kko.to/DD8O3ZE7Yw',
+    routeUrl: 'https://kko.to/DD8O3ZE7Yw',
     parking: '부평우림 라이온스밸리 3시간 무료 (인천시 부평구 부평대로 283), 지하 2층 A동 기둥번호(A05) 주변 주차 후 갈산역 만남의광장 이동 후 갈산역 2번 출구로 나오세요.(에스컬레이터)',
     subway: '인천지하철 갈산역 2번 출구로 나오세요.',
     bus: '포항 ',
@@ -759,13 +764,49 @@ async function copyToClipboard(text) {
 function bindShareButtons() {
   const shareButton = document.getElementById('shareButton');
   const copyLinkButton = document.getElementById('copyLinkButton');
+  const shareUrl = CONFIG.site.publicUrl || window.location.href;
 
-  // TODO: Add Kakao JavaScript SDK here if you want a real KakaoTalk share flow.
   shareButton.addEventListener('click', async () => {
+    const kakao = window.Kakao;
+    const kakaoKey = CONFIG.kakao.javascriptKey;
+
+    if (kakao && !isPlaceholderValue(kakaoKey) && kakaoKey) {
+      try {
+        if (!kakao.isInitialized()) {
+          kakao.init(kakaoKey);
+        }
+
+        kakao.Share.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: CONFIG.footer.shareTitle,
+            description: CONFIG.footer.shareText,
+            imageUrl: CONFIG.site.shareImageUrl,
+            link: {
+              mobileWebUrl: shareUrl,
+              webUrl: shareUrl,
+            },
+          },
+          buttons: [
+            {
+              title: '청첩장 보기',
+              link: {
+                mobileWebUrl: shareUrl,
+                webUrl: shareUrl,
+              },
+            },
+          ],
+        });
+        return;
+      } catch (error) {
+        console.error('Kakao share failed:', error);
+      }
+    }
+
     const shareData = {
       title: CONFIG.footer.shareTitle,
       text: CONFIG.footer.shareText,
-      url: window.location.href,
+      url: shareUrl,
     };
 
     if (navigator.share) {
@@ -777,14 +818,14 @@ function bindShareButtons() {
       }
     }
 
-    const copied = await copyToClipboard(window.location.href);
+    const copied = await copyToClipboard(shareUrl);
     if (copied) {
       showToast('공유 링크가 복사되었습니다.');
     }
   });
 
   copyLinkButton.addEventListener('click', async () => {
-    const copied = await copyToClipboard(window.location.href);
+    const copied = await copyToClipboard(shareUrl);
     if (copied) {
       showToast('링크가 복사되었습니다.');
     }
