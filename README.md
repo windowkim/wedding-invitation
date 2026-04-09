@@ -31,15 +31,29 @@ GitHub Pages에 바로 올릴 수 있는 정적 모바일 청첩장입니다. `i
 권장 파일 예시:
 
 - `/images/hero.jpg`
-- `/images/gallery-1.jpg`
-- `/images/gallery-2.jpg`
-- `/images/gallery-3.jpg`
+- `/images/gallery/1.jpg`
+- `/images/gallery/2.jpg`
+- `/images/gallery/3.jpg`
 - `/images/guide-1.jpg`
 - `/images/guide-2.jpg`
 - `/images/guide-3.jpg`
 - `/images/약도.jpg`
 
-현재 `CONFIG` 안에는 일부 이미지 경로가 placeholder 상태로 들어 있습니다. 실제 파일명을 넣어 주시면 자동으로 반영됩니다.
+갤러리 사진은 `images/gallery/` 폴더에 넣고, `script.js`의 `CONFIG.gallery.images`에 파일명을 직접 적으면 됩니다.
+
+예를 들면:
+
+```js
+gallery: {
+  images: [
+    { src: '/images/gallery/1.jpg', alt: '사진 1' },
+    { src: '/images/gallery/2.jpeg', alt: '사진 2' },
+    { src: '/images/gallery/3.png', alt: '사진 3' },
+  ],
+},
+```
+
+파일명은 꼭 숫자일 필요는 없지만, `1.jpg`, `2.jpg`, `3.jpg`처럼 맞춰두면 관리하기 편합니다.
 
 ## GitHub Pages 배포
 

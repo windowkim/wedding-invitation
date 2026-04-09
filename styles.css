@@ -579,8 +579,8 @@ iframe {
     linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(236, 229, 238, 0.72));
 }
 
-.map-placeholder::after,
-.image-placeholder::after {
+.map-placeholder[data-label]::after,
+.image-placeholder[data-label]::after {
   content: attr(data-label);
   position: absolute;
   inset: auto 16px 16px;

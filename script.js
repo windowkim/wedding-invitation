@@ -88,9 +88,10 @@ const CONFIG = {
   },
   gallery: {
     images: [
-      { src: '/images/<갤러리 1>', alt: '<갤러리 1>' },
-      { src: '/images/<갤러리 2>', alt: '<갤러리 2>' },
-      { src: '/images/<갤러리 3>', alt: '<갤러리 3>' },
+      { src: '/images/gallery/1.JPG', alt: '사진 1' },
+      { src: '/images/gallery/2.JPG', alt: '사진 2' },
+      { src: '/images/gallery/3.JPG', alt: '사진 3' },
+      { src: '/images/gallery/4.JPG', alt: '사진 4' },
     ],
   },
   location: {
@@ -364,8 +365,20 @@ function renderContacts() {
 function renderGallery() {
   const track = document.getElementById('galleryTrack');
   const dots = document.getElementById('galleryDots');
+  const galleryImages = CONFIG.gallery.images.filter((item) => item && item.src && !isPlaceholderValue(item.src));
 
-  track.innerHTML = CONFIG.gallery.images
+  if (!galleryImages.length) {
+    track.innerHTML = `
+      <article class="gallery-item">
+        <div class="image-placeholder" data-label="script.js의 CONFIG.gallery.images에 사진 경로를 넣어 주세요."></div>
+        <span class="gallery-caption">갤러리 사진을 추가해 주세요</span>
+      </article>
+    `;
+    dots.innerHTML = '';
+    return;
+  }
+
+  track.innerHTML = galleryImages
     .map((item, index) => {
       const media = createImageMarkup(item.src, item.alt, item.alt);
       return `
@@ -377,9 +390,13 @@ function renderGallery() {
     })
     .join('');
 
-  dots.innerHTML = CONFIG.gallery.images
+  dots.innerHTML = galleryImages
     .map((_, index) => `<span class="${index === 0 ? 'is-active' : ''}"></span>`)
     .join('');
+
+  if (track.dataset.scrollBound === 'true') {
+    return;
+  }
 
   track.addEventListener('scroll', () => {
     const cards = [...track.children];
@@ -396,6 +413,7 @@ function renderGallery() {
       dot.classList.toggle('is-active', index === activeIndex);
     });
   });
+  track.dataset.scrollBound = 'true';
 }
 
 function renderCalendar() {
