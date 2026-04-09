@@ -5,7 +5,7 @@ const CONFIG = {
     heroImage: '/images/main.jpeg',
     shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/main.jpeg',
     backgroundMusic: '/bgms/the_day_we_met_first_swing_ver.mp3',
-    backgroundMusicLabel: '우리가 처음 만난 날 (김헌 님이 선물해 주신 곡)',
+    backgroundMusicLabel: '우리가 처음 만난 날\n(김헌 님이 선물해 주신 곡)',
     heroKicker: 'Wedding Invitation',
   },
   kakao: {
@@ -471,7 +471,7 @@ function renderCalendar() {
 
   weekdays.innerHTML = WEEK_DAYS.map((day) => `<div>${day}</div>`).join('');
   title.textContent = `${year}년 ${month + 1}월`;
-  helper.textContent = weddingDate ? CONFIG.wedding.displayDate : '날짜 입력 후 하이라이트됩니다';
+  helper.textContent = weddingDate ? '' : '날짜 입력 후 하이라이트됩니다';
 
   const cells = [];
   for (let i = 0; i < firstDay; i += 1) {
@@ -491,12 +491,14 @@ function renderCalendar() {
 }
 
 function renderCountdown() {
+  const date = document.getElementById('countdownDate');
   const message = document.getElementById('countdownMessage');
   const live = document.getElementById('countdownLive');
   const weddingDate = getWeddingDate();
 
   const update = () => {
     if (!weddingDate) {
+      date.textContent = CONFIG.wedding.displayDate;
       message.textContent = `${CONFIG.couple.groom.name} ❤️ ${CONFIG.couple.bride.name}의 결혼식이 [X]일 남았습니다`;
       live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시`; 
       return;
@@ -509,6 +511,7 @@ function renderCountdown() {
     const minutes = Math.floor((safeDiff / (1000 * 60)) % 60);
     const seconds = Math.floor((safeDiff / 1000) % 60);
 
+    date.textContent = CONFIG.wedding.displayDate;
     message.textContent = `${CONFIG.couple.groom.name} ❤️ ${CONFIG.couple.bride.name}의 결혼식이 ${days}일 남았습니다`;
     live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
   };

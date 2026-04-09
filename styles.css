@@ -135,8 +135,10 @@ iframe {
 .hero-meta {
   margin: 14px 0 0;
   color: rgba(248, 246, 244, 0.96);
-  font-size: 0.98rem;
-  line-height: 1.7;
+  font-size: clamp(1.22rem, 5vw, 1.55rem);
+  font-weight: 600;
+  line-height: 1.8;
+  letter-spacing: -0.01em;
 }
 
 .scroll-indicator {
@@ -235,6 +237,7 @@ iframe {
   color: var(--text-main);
   font-weight: 700;
   line-height: 1.5;
+  white-space: pre-line;
 }
 
 .audio-player__status {
@@ -568,6 +571,7 @@ iframe {
   text-align: right;
   font-size: clamp(0.7rem, 2.9vw, 0.84rem);
   white-space: nowrap;
+  min-height: 1.2em;
 }
 
 .calendar-weekdays,
@@ -606,6 +610,15 @@ iframe {
   color: #5a4344;
   font-weight: 700;
   border-color: rgba(232, 160, 156, 0.4);
+}
+
+.countdown-date {
+  margin: 0 0 10px;
+  color: #cf6e86;
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(1.18rem, 4.8vw, 1.52rem);
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .countdown-message {
