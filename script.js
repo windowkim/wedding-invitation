@@ -479,7 +479,7 @@ function renderLocation() {
 
   if (isPlaceholderValue(CONFIG.location.embedUrl)) {
     mapFrame.innerHTML = `
-      <div class="map-placeholder" data-label="카카오맵 임베드 URL을 넣으면 지도가 표시됩니다.">
+      <div class="map-placeholder">
         ${createImageMarkup(CONFIG.location.fallbackImage, '약도 이미지', '약도 이미지를 추가하면 표시됩니다.')}
       </div>
     `;

@@ -131,6 +131,39 @@ create policy "public insert guestbook"
 응답은 Supabase Dashboard의 `Table Editor > bus_survey_submissions` 에서 확인하면 됩니다.
 축하 메시지는 `Table Editor > guestbook_messages` 에서 확인하면 됩니다.
 
+### 3-1. 버스 탑승 정보 관리자용 요약 표 만들기
+
+아래 SQL을 `SQL Editor`에서 한 번 실행하면, 합계와 탑승자 이름을 한 번에 볼 수 있는 관리자용 View가 생성됩니다.
+
+```sql
+create or replace view public.bus_survey_admin_summary as
+select
+  coalesce(sum(case when outbound_bus = '탑승' then outbound_guest_count else 0 end), 0) as outbound_guest_count_sum,
+  coalesce(sum(case when return_bus = '탑승' then return_guest_count else 0 end), 0) as return_guest_count_sum,
+  coalesce(
+    string_agg(distinct case when outbound_bus = '탑승' then name end, ', ')
+      filter (where outbound_bus = '탑승'),
+    ''
+  ) as outbound_rider_names,
+  coalesce(
+    string_agg(distinct case when return_bus = '탑승' then name end, ', ')
+      filter (where return_bus = '탑승'),
+    ''
+  ) as return_rider_names
+from public.bus_survey_submissions;
+```
+
+실행 후에는 아래 경로에서 확인하면 됩니다.
+
+- `Table Editor > bus_survey_admin_summary`
+
+표에 보이는 항목:
+
+- `outbound_guest_count_sum`: `포항 -> 인천` 탑승 인원 총합
+- `return_guest_count_sum`: `인천 -> 포항` 탑승 인원 총합
+- `outbound_rider_names`: `포항 -> 인천`에 `탑승`이라고 남긴 하객 이름 목록
+- `return_rider_names`: `인천 -> 포항`에 `탑승`이라고 남긴 하객 이름 목록
+
 ### 4. 아직 Supabase를 연결하지 않았다면
 
 지금처럼 브라우저 `localStorage`에만 저장됩니다. 이 경우에는 제출한 사람 본인 브라우저에서만 볼 수 있습니다.
