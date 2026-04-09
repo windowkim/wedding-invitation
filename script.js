@@ -11,9 +11,11 @@ const CONFIG = {
     javascriptKey: 'f6d0f3d1014d5ee4dcec9f03394e8b92',
   },
   supabase: {
-    url: '<SUPABASE_PROJECT_URL>',
-    anonKey: '<SUPABASE_ANON_KEY>',
+    url: 'https://lugeiktjewlcspivjwrd.supabase.co',
+    anonKey: '',
+    publishableKey: 'sb_publishable_7AdmCwZIrpK6Q4S1vGZtYA_AzA2P4vF',
     busSurveyTable: 'bus_survey_submissions',
+    guestbookTable: 'guestbook_messages',
   },
   colors: {
     background: '#F8F6F4',
@@ -199,12 +201,13 @@ function resolveAssetUrl(value) {
 }
 
 function hasSupabaseBusConfig() {
+  const publicKey = CONFIG.supabase.publishableKey || CONFIG.supabase.anonKey;
   return (
     CONFIG.supabase &&
     CONFIG.supabase.url &&
-    CONFIG.supabase.anonKey &&
+    publicKey &&
     !isPlaceholderValue(CONFIG.supabase.url) &&
-    !isPlaceholderValue(CONFIG.supabase.anonKey)
+    !isPlaceholderValue(publicKey)
   );
 }
 
@@ -564,6 +567,48 @@ function renderAccounts() {
 }
 
 function loadGuestbookMessages() {
+  if (hasSupabaseBusConfig()) {
+    const publicKey = CONFIG.supabase.publishableKey || CONFIG.supabase.anonKey;
+    const endpoint = `${CONFIG.supabase.url}/rest/v1/${CONFIG.supabase.guestbookTable}?select=author,content,color_index,created_at&order=created_at.asc`;
+
+    return fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        apikey: publicKey,
+        Authorization: `Bearer ${publicKey}`,
+      },
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Supabase guestbook select failed');
+        }
+
+        return response.json();
+      })
+      .then((rows) => {
+        state.guestbookMessages = rows.map((row) => ({
+          author: row.author,
+          content: row.content,
+          colorIndex: row.color_index,
+          createdAt: new Date(row.created_at).toLocaleString('ko-KR'),
+        }));
+      })
+      .catch((error) => {
+        console.error('Guestbook load failed:', error);
+        const saved = localStorage.getItem(CONFIG.guestbook.storageKey);
+        let parsed = [];
+
+        try {
+          parsed = saved ? JSON.parse(saved) : [];
+        } catch (parseError) {
+          parsed = [];
+        }
+
+        state.guestbookMessages = [...CONFIG.guestbook.sampleMessages, ...parsed];
+      });
+  }
+
   const saved = localStorage.getItem(CONFIG.guestbook.storageKey);
   let parsed = [];
 
@@ -576,6 +621,7 @@ function loadGuestbookMessages() {
   // TODO: Replace localStorage loading with Lovable Cloud / Supabase SELECT from guestbook_messages.
   // TODO: Subscribe to Realtime updates so new guestbook messages appear instantly across devices.
   state.guestbookMessages = [...CONFIG.guestbook.sampleMessages, ...parsed];
+  return Promise.resolve();
 }
 
 function persistGuestbookMessages() {
@@ -618,7 +664,40 @@ async function submitGuestbookMessage(payload) {
     createdAt: new Date().toLocaleString('ko-KR'),
   };
 
-  // TODO: Replace localStorage write with Lovable Cloud / Supabase INSERT into guestbook_messages.
+  if (hasSupabaseBusConfig()) {
+    const publicKey = CONFIG.supabase.publishableKey || CONFIG.supabase.anonKey;
+    const endpoint = `${CONFIG.supabase.url}/rest/v1/${CONFIG.supabase.guestbookTable}`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: publicKey,
+        Authorization: `Bearer ${publicKey}`,
+        Prefer: 'return=representation',
+      },
+      body: JSON.stringify({
+        author: payload.author,
+        content: payload.content,
+        color_index: message.colorIndex,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Supabase guestbook insert failed');
+    }
+
+    const [insertedRow] = await response.json();
+    state.guestbookMessages.push({
+      author: insertedRow.author,
+      content: insertedRow.content,
+      colorIndex: insertedRow.color_index,
+      createdAt: new Date(insertedRow.created_at).toLocaleString('ko-KR'),
+    });
+    renderGuestbook();
+    return;
+  }
+
   state.guestbookMessages.push(message);
   persistGuestbookMessages();
   renderGuestbook();
@@ -638,13 +717,14 @@ function getStoredBusSurveySubmissions() {
 
 async function submitBusSurvey(payload) {
   if (hasSupabaseBusConfig()) {
+    const publicKey = CONFIG.supabase.publishableKey || CONFIG.supabase.anonKey;
     const endpoint = `${CONFIG.supabase.url}/rest/v1/${CONFIG.supabase.busSurveyTable}`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        apikey: CONFIG.supabase.anonKey,
-        Authorization: `Bearer ${CONFIG.supabase.anonKey}`,
+        apikey: publicKey,
+        Authorization: `Bearer ${publicKey}`,
         Prefer: 'return=minimal',
       },
       body: JSON.stringify({
@@ -725,10 +805,15 @@ function bindForms() {
       return;
     }
 
-    await submitGuestbookMessage({ author, content });
-    guestbookForm.reset();
-    guestbookForm.querySelectorAll('.is-valid').forEach((field) => field.classList.remove('is-valid'));
-    showToast(CONFIG.guestbook.submitSuccessMessage);
+    try {
+      await submitGuestbookMessage({ author, content });
+      guestbookForm.reset();
+      guestbookForm.querySelectorAll('.is-valid').forEach((field) => field.classList.remove('is-valid'));
+      showToast(CONFIG.guestbook.submitSuccessMessage);
+    } catch (error) {
+      console.error('Guestbook submission failed:', error);
+      showToast('축하 메시지 저장에 실패했습니다. 설정을 확인해 주세요.');
+    }
   });
 
   busForm.addEventListener('submit', async (event) => {
@@ -1022,7 +1107,7 @@ function renderFooter() {
   document.getElementById('footerCopy').textContent = CONFIG.footer.copy;
 }
 
-function initialize() {
+async function initialize() {
   renderHero();
   renderBusSurveyCopy();
   renderInvitation();
@@ -1034,7 +1119,7 @@ function initialize() {
   renderVenueGuide();
   renderAccounts();
   renderFooter();
-  loadGuestbookMessages();
+  await loadGuestbookMessages();
   renderGuestbook();
   bindForms();
   bindModals();

@@ -67,14 +67,15 @@ GitHub Pages에 바로 올릴 수 있는 정적 모바일 청첩장입니다. `i
 ### 1. Supabase 프로젝트 만들기
 
 1. `https://supabase.com/` 에서 새 프로젝트를 만듭니다.
-2. 프로젝트가 만들어지면 `Project URL`과 `anon public key`를 확인합니다.
+2. 프로젝트가 만들어지면 `Project URL`과 `Publishable key`를 확인합니다.
 3. `script.js` 상단의 `CONFIG.supabase`에 붙여 넣습니다.
 
 ```js
 supabase: {
   url: '<SUPABASE_PROJECT_URL>',
-  anonKey: '<SUPABASE_ANON_KEY>',
+  publishableKey: '<SUPABASE_PUBLISHABLE_KEY>',
   busSurveyTable: 'bus_survey_submissions',
+  guestbookTable: 'guestbook_messages',
 },
 ```
 
@@ -101,11 +102,34 @@ create policy "public insert bus survey"
   for insert
   to anon
   with check (true);
+
+create table if not exists public.guestbook_messages (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  author text not null,
+  content text not null,
+  color_index integer not null default 0
+);
+
+alter table public.guestbook_messages enable row level security;
+
+create policy "public select guestbook"
+  on public.guestbook_messages
+  for select
+  to anon
+  using (true);
+
+create policy "public insert guestbook"
+  on public.guestbook_messages
+  for insert
+  to anon
+  with check (true);
 ```
 
 ### 3. 어디서 확인하나
 
 응답은 Supabase Dashboard의 `Table Editor > bus_survey_submissions` 에서 확인하면 됩니다.
+축하 메시지는 `Table Editor > guestbook_messages` 에서 확인하면 됩니다.
 
 ### 4. 아직 Supabase를 연결하지 않았다면
 
