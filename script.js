@@ -4,16 +4,23 @@ const CONFIG = {
     publicUrl: 'https://windowkim.github.io/wedding-invitation/',
     heroImage: '/images/main.jpeg',
     shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/main.jpeg',
+    backgroundMusic: '/bgms/the_day_we_met_first_swing_ver.mp3',
     heroKicker: 'Wedding Invitation',
   },
   kakao: {
     javascriptKey: 'f6d0f3d1014d5ee4dcec9f03394e8b92',
   },
   colors: {
-    background: '#537551',
-    accent: '#d07ca6',
-    accentSoft: 'rgba(205, 148, 177, 0.18)',
-    contactButtonBackground: '<배경색깔>',
+    background: '#F8F6F4',
+    accent: '#F2B8B5',
+    accentStrong: '#E8A09C',
+    secondary: '#B5A8B9',
+    accentSoft: 'rgba(242, 184, 181, 0.22)',
+    textMain: '#5E515D',
+    textMuted: 'rgba(94, 81, 93, 0.74)',
+    cardBg: 'rgba(255, 255, 255, 0.74)',
+    cardBorder: 'rgba(181, 168, 185, 0.28)',
+    contactButtonBackground: '#F2B8B5',
   },
   couple: {
     groom: {
@@ -86,7 +93,7 @@ const CONFIG = {
     naverMapUrl: 'https://naver.me/GJZ3adD7',
     kakaoMapUrl: 'https://kko.to/DD8O3ZE7Yw',
     routeUrl: 'https://kko.to/DD8O3ZE7Yw',
-    parking: '부평우림 라이온스밸리 3시간 무료 (인천시 부평구 부평대로 283), 지하 2층 A동 기둥번호(A05) 주변 주차 후 갈산역 만남의광장 이동 후 갈산역 2번 출구로 나오세요.(에스컬레이터)',
+    parking: '부평우림 라이온스밸리 3시간 무료 (인천시 부평구 부평대로 283), 지하 2층 A동 기둥번호(A05) 주변 주차 후 갈산역 만남의광장 이동 후 갈산역 2번 출구로 나오세요.',
     subway: '인천지하철 갈산역 2번 출구로 나오세요.',
     bus: ' ',
     charterBus:
@@ -113,15 +120,18 @@ const CONFIG = {
       { holder: '유은영', bank: '<은행명>', number: '<계좌 정보>' },
     ],
   },
-  rsvp: {
+  busSurvey: {
     autoPopupDelayMs: 2000,
-    popupDismissKey: 'wedding-rsvp-hide-date',
-    submitSuccessMessage: '참석 의사가 저장되었습니다.',
+    popupDismissKey: 'wedding-bus-survey-hide-date',
+    storageKey: 'wedding-bus-survey-submissions',
+    sectionCopy:
+      '귀한 걸음 해주시는 분들을 편하게 모시고자 좌석이 부족하지 않도록 탑승 조사를 하고 있습니다. 포항-인천 간의 대절 버스 이용 여부를 알려주시면 감사하겠습니다.',
+    submitSuccessMessage: '버스 탑승 여부가 저장되었습니다.',
   },
   guestbook: {
     storageKey: 'wedding-guestbook-messages',
     sampleMessages: [],
-    noteColors: ['#f5e28a', '#f0c8a3', '#d8e592', '#cdd9f3', '#f1c0c7', '#d8c6f2'],
+    noteColors: ['#F8D9D6', '#F3C7C5', '#E7DCE9', '#D9D0DE', '#F7EBDD', '#EEDBDD'],
     submitSuccessMessage: '축하 메시지가 등록되었습니다.',
   },
   footer: {
@@ -223,7 +233,13 @@ function renderHero() {
   document.title = CONFIG.site.title;
   document.documentElement.style.setProperty('--bg', CONFIG.colors.background);
   document.documentElement.style.setProperty('--accent', CONFIG.colors.accent);
+  document.documentElement.style.setProperty('--accent-strong', CONFIG.colors.accentStrong);
+  document.documentElement.style.setProperty('--secondary', CONFIG.colors.secondary);
   document.documentElement.style.setProperty('--accent-soft', CONFIG.colors.accentSoft);
+  document.documentElement.style.setProperty('--text-main', CONFIG.colors.textMain);
+  document.documentElement.style.setProperty('--text-muted', CONFIG.colors.textMuted);
+  document.documentElement.style.setProperty('--card-bg', CONFIG.colors.cardBg);
+  document.documentElement.style.setProperty('--card-border', CONFIG.colors.cardBorder);
 
   const heroMedia = document.getElementById('heroMedia');
   const heroTitle = document.getElementById('heroTitle');
@@ -241,6 +257,19 @@ function renderHero() {
     heroMedia.style.setProperty('--hero-image', 'none');
   };
   heroImage.src = heroImageUrl;
+}
+
+function renderBusSurveyCopy() {
+  const busSectionCopy = document.getElementById('busSectionCopy');
+  const busModalDescription = document.getElementById('busModalDescription');
+
+  if (busSectionCopy) {
+    busSectionCopy.textContent = CONFIG.busSurvey.sectionCopy;
+  }
+
+  if (busModalDescription) {
+    busModalDescription.textContent = CONFIG.busSurvey.sectionCopy;
+  }
 }
 
 function renderInvitation() {
@@ -580,35 +609,41 @@ async function submitGuestbookMessage(payload) {
   renderGuestbook();
 }
 
-async function submitRsvp(payload) {
+function getStoredBusSurveySubmissions() {
   let submissions = [];
 
   try {
-    submissions = JSON.parse(localStorage.getItem('wedding-rsvp-submissions') || '[]');
+    submissions = JSON.parse(localStorage.getItem(CONFIG.busSurvey.storageKey) || '[]');
   } catch (error) {
     submissions = [];
   }
 
-  // TODO: Replace localStorage write with Lovable Cloud / Supabase INSERT into rsvp_submissions.
+  return submissions;
+}
+
+async function submitBusSurvey(payload) {
+  const submissions = getStoredBusSurveySubmissions();
+
+  // TODO: Replace localStorage write with your backend or database if you want to collect every guest's response centrally.
   submissions.push({ ...payload, createdAt: new Date().toISOString() });
-  localStorage.setItem('wedding-rsvp-submissions', JSON.stringify(submissions));
+  localStorage.setItem(CONFIG.busSurvey.storageKey, JSON.stringify(submissions));
 }
 
 function bindForms() {
   const guestbookForm = document.getElementById('guestbookForm');
-  const rsvpForm = document.getElementById('rsvpForm');
-  const sideInput = document.getElementById('rsvpSide');
+  const busForm = document.getElementById('busForm');
+  const sideInput = document.getElementById('busSide');
 
-  document.querySelectorAll('#sideToggleGroup .toggle-button').forEach((button) => {
+  document.querySelectorAll('#busSideToggleGroup .toggle-button').forEach((button) => {
     button.addEventListener('click', () => {
-      document.querySelectorAll('#sideToggleGroup .toggle-button').forEach((item) => {
+      document.querySelectorAll('#busSideToggleGroup .toggle-button').forEach((item) => {
         item.classList.toggle('is-selected', item === button);
       });
       sideInput.value = button.dataset.side || '신랑측';
     });
   });
 
-  [guestbookForm, rsvpForm].forEach((form) => {
+  [guestbookForm, busForm].forEach((form) => {
     form.querySelectorAll('input, textarea').forEach((field) => {
       field.addEventListener('input', () => {
         field.classList.remove('is-invalid');
@@ -621,15 +656,15 @@ function bindForms() {
     });
   });
 
-  rsvpForm.querySelectorAll('input[name="attendance"]').forEach((field) => {
+  busForm.querySelectorAll('input[name="outbound_bus"]').forEach((field) => {
     field.addEventListener('change', () => {
-      document.getElementById('attendanceChoices')?.classList.remove('is-invalid');
+      document.getElementById('outboundBusChoices')?.classList.remove('is-invalid');
     });
   });
 
-  rsvpForm.querySelectorAll('input[name="meal_preference"]').forEach((field) => {
+  busForm.querySelectorAll('input[name="return_bus"]').forEach((field) => {
     field.addEventListener('change', () => {
-      document.getElementById('mealChoices')?.classList.remove('is-invalid');
+      document.getElementById('returnBusChoices')?.classList.remove('is-invalid');
     });
   });
 
@@ -651,46 +686,55 @@ function bindForms() {
     showToast(CONFIG.guestbook.submitSuccessMessage);
   });
 
-  rsvpForm.addEventListener('submit', async (event) => {
+  busForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const formData = new FormData(rsvpForm);
+    const formData = new FormData(busForm);
     const payload = {
       side: sideInput.value,
       name: String(formData.get('name') || '').trim(),
       phone: String(formData.get('phone') || '').trim(),
-      attendance: String(formData.get('attendance') || '').trim(),
-      guest_count: String(formData.get('guest_count') || '').trim(),
-      companions: String(formData.get('companions') || '').trim(),
-      meal_preference: String(formData.get('meal_preference') || '').trim(),
+      outbound_bus: String(formData.get('outbound_bus') || '').trim(),
+      outbound_guest_count: String(formData.get('outbound_guest_count') || '').trim(),
+      return_bus: String(formData.get('return_bus') || '').trim(),
+      return_guest_count: String(formData.get('return_guest_count') || '').trim(),
       message: String(formData.get('message') || '').trim(),
     };
 
     const missing = [];
-    if (!payload.name) missing.push('rsvpName');
-    if (!payload.phone) missing.push('rsvpPhone');
-    if (!payload.attendance) missing.push('attendanceChoices');
-    if (!payload.guest_count) missing.push('rsvpGuestCount');
-    if (!payload.meal_preference) missing.push('mealChoices');
+    if (!payload.name) missing.push('busName');
+    if (!payload.phone) missing.push('busPhone');
+    if (!payload.outbound_bus) missing.push('outboundBusChoices');
+    if (!payload.return_bus) missing.push('returnBusChoices');
+    if (payload.outbound_bus === '탑승' && !payload.outbound_guest_count) missing.push('outboundGuestCount');
+    if (payload.return_bus === '탑승' && !payload.return_guest_count) missing.push('returnGuestCount');
+
+    if (payload.outbound_bus === '미탑승' && !payload.outbound_guest_count) {
+      payload.outbound_guest_count = '0';
+    }
+
+    if (payload.return_bus === '미탑승' && !payload.return_guest_count) {
+      payload.return_guest_count = '0';
+    }
 
     if (missing.length) {
-      markInvalidFields(rsvpForm, missing);
+      markInvalidFields(busForm, missing);
       showToast('필수 항목을 모두 입력해 주세요.');
       return;
     }
 
-    await submitRsvp(payload);
-    if (document.getElementById('hideRsvpToday').checked) {
-      localStorage.setItem(CONFIG.rsvp.popupDismissKey, getTodayKey());
+    await submitBusSurvey(payload);
+    if (document.getElementById('hideBusToday').checked) {
+      localStorage.setItem(CONFIG.busSurvey.popupDismissKey, getTodayKey());
     }
 
-    rsvpForm.reset();
+    busForm.reset();
     sideInput.value = '신랑측';
-    document.querySelectorAll('#sideToggleGroup .toggle-button').forEach((button, index) => {
+    document.querySelectorAll('#busSideToggleGroup .toggle-button').forEach((button, index) => {
       button.classList.toggle('is-selected', index === 0);
     });
-    rsvpForm.querySelectorAll('.is-valid').forEach((field) => field.classList.remove('is-valid'));
-    closeModal(document.getElementById('rsvpModal'));
-    showToast(CONFIG.rsvp.submitSuccessMessage);
+    busForm.querySelectorAll('.is-valid').forEach((field) => field.classList.remove('is-valid'));
+    closeModal(document.getElementById('busModal'));
+    showToast(CONFIG.busSurvey.submitSuccessMessage);
   });
 }
 
@@ -721,22 +765,22 @@ function closeModal(modal) {
 
 function bindModals() {
   const contactModal = document.getElementById('contactModal');
-  const rsvpModal = document.getElementById('rsvpModal');
+  const busModal = document.getElementById('busModal');
 
   document.getElementById('openContactModal').addEventListener('click', () => openModal(contactModal));
-  document.getElementById('openRsvpModal').addEventListener('click', () => openModal(rsvpModal));
+  document.getElementById('openBusModal').addEventListener('click', () => openModal(busModal));
 
   document.querySelectorAll('[data-close-modal]').forEach((button) => {
     button.addEventListener('click', () => {
       const modal = document.querySelector(button.dataset.closeModal);
-      if (modal && modal.id === 'rsvpModal' && document.getElementById('hideRsvpToday').checked) {
-        localStorage.setItem(CONFIG.rsvp.popupDismissKey, getTodayKey());
+      if (modal && modal.id === 'busModal' && document.getElementById('hideBusToday').checked) {
+        localStorage.setItem(CONFIG.busSurvey.popupDismissKey, getTodayKey());
       }
       closeModal(modal);
     });
   });
 
-  [contactModal, rsvpModal].forEach((modal) => {
+  [contactModal, busModal].forEach((modal) => {
     modal.addEventListener('click', (event) => {
       if (event.target === modal) {
         closeModal(modal);
@@ -747,12 +791,12 @@ function bindModals() {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       closeModal(contactModal);
-      closeModal(rsvpModal);
+      closeModal(busModal);
     }
   });
 
-  if (localStorage.getItem(CONFIG.rsvp.popupDismissKey) !== getTodayKey()) {
-    window.setTimeout(() => openModal(rsvpModal), CONFIG.rsvp.autoPopupDelayMs);
+  if (localStorage.getItem(CONFIG.busSurvey.popupDismissKey) !== getTodayKey()) {
+    window.setTimeout(() => openModal(busModal), CONFIG.busSurvey.autoPopupDelayMs);
   }
 }
 
@@ -856,6 +900,58 @@ function bindShareButtons() {
   });
 }
 
+function bindAudioControls() {
+  const audio = document.getElementById('bgmAudio');
+  const muteButton = document.getElementById('audioMuteButton');
+  const playButton = document.getElementById('audioPlayButton');
+  const pauseButton = document.getElementById('audioPauseButton');
+  const restartButton = document.getElementById('audioRestartButton');
+  const audioStatus = document.getElementById('audioStatus');
+
+  audio.src = resolveAssetUrl(CONFIG.site.backgroundMusic);
+  audio.volume = 0.6;
+  audio.muted = true;
+
+  const updateAudioStatus = (message) => {
+    audioStatus.textContent = message;
+    muteButton.textContent = audio.muted ? '🔇' : '🔊';
+  };
+
+  playButton.addEventListener('click', async () => {
+    try {
+      audio.muted = false;
+      await audio.play();
+      updateAudioStatus('배경음악이 재생 중이에요.');
+    } catch (error) {
+      updateAudioStatus('재생 버튼을 한 번 더 눌러 주세요.');
+    }
+  });
+
+  pauseButton.addEventListener('click', () => {
+    audio.pause();
+    updateAudioStatus('배경음악을 잠시 멈췄어요.');
+  });
+
+  muteButton.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    updateAudioStatus(audio.muted ? '배경음악이 음소거되어 있어요.' : '배경음악 소리를 켰어요.');
+  });
+
+  restartButton.addEventListener('click', async () => {
+    try {
+      audio.currentTime = 0;
+      audio.muted = false;
+      await audio.play();
+      updateAudioStatus('처음부터 다시 재생하고 있어요.');
+    } catch (error) {
+      updateAudioStatus('재생 버튼을 눌러 음악을 시작해 주세요.');
+    }
+  });
+
+  audio.addEventListener('ended', () => updateAudioStatus('배경음악이 끝났어요.'));
+  updateAudioStatus('배경음악을 준비했어요.');
+}
+
 function bindRevealAnimation() {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -878,6 +974,7 @@ function renderFooter() {
 
 function initialize() {
   renderHero();
+  renderBusSurveyCopy();
   renderInvitation();
   renderContacts();
   renderGallery();
@@ -893,7 +990,12 @@ function initialize() {
   bindModals();
   bindScrollIndicator();
   bindShareButtons();
+  bindAudioControls();
   bindRevealAnimation();
+
+  window.weddingInvitation = {
+    getBusSurveySubmissions: () => getStoredBusSurveySubmissions(),
+  };
 }
 
 document.addEventListener('DOMContentLoaded', initialize);

@@ -1,14 +1,15 @@
 :root {
-  --bg: #474a37;
-  --bg-deep: #3c3f30;
-  --accent: #d8e592;
-  --accent-strong: #ecf5b7;
-  --accent-soft: rgba(216, 229, 146, 0.18);
-  --text-main: #f6f4ea;
-  --text-muted: rgba(246, 244, 234, 0.72);
-  --card-bg: rgba(255, 255, 255, 0.08);
-  --card-border: rgba(216, 229, 146, 0.18);
-  --shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+  --bg: #f8f6f4;
+  --bg-deep: #efe6ea;
+  --accent: #f2b8b5;
+  --accent-strong: #e8a09c;
+  --secondary: #b5a8b9;
+  --accent-soft: rgba(242, 184, 181, 0.22);
+  --text-main: #5e515d;
+  --text-muted: rgba(94, 81, 93, 0.74);
+  --card-bg: rgba(255, 255, 255, 0.76);
+  --card-border: rgba(181, 168, 185, 0.28);
+  --shadow: 0 28px 80px rgba(126, 109, 129, 0.16);
   --radius-lg: 28px;
   --radius-md: 20px;
   --radius-sm: 14px;
@@ -29,8 +30,8 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--text-main);
   background:
-    radial-gradient(circle at 1px 1px, rgba(216, 229, 146, 0.12) 1px, transparent 0) 0 0 / 18px 18px,
-    linear-gradient(180deg, #4d503b 0%, var(--bg) 35%, #404330 100%);
+    radial-gradient(circle at 1px 1px, rgba(181, 168, 185, 0.2) 1px, transparent 0) 0 0 / 18px 18px,
+    linear-gradient(180deg, #fffaf8 0%, var(--bg) 38%, #f2ecef 100%);
 }
 
 button,
@@ -68,7 +69,7 @@ iframe {
   width: min(100%, 480px);
   min-height: 100vh;
   margin: 0 auto;
-  background: linear-gradient(180deg, rgba(71, 74, 55, 0.88), rgba(71, 74, 55, 0.96));
+  background: linear-gradient(180deg, rgba(248, 246, 244, 0.92), rgba(243, 237, 240, 0.96));
   position: relative;
   overflow: hidden;
 }
@@ -90,10 +91,10 @@ iframe {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(20, 22, 16, 0.08), rgba(20, 22, 16, 0.74)),
-    linear-gradient(135deg, rgba(216, 229, 146, 0.14), transparent 55%),
+    linear-gradient(180deg, rgba(94, 81, 93, 0.08), rgba(94, 81, 93, 0.56)),
+    linear-gradient(135deg, rgba(242, 184, 181, 0.18), transparent 55%),
     center / cover no-repeat var(--hero-image, none),
-    #5a5d46;
+    #e8dde0;
 }
 
 .hero-overlay {
@@ -102,7 +103,7 @@ iframe {
   width: 100%;
   padding: 40px 24px 110px;
   text-align: center;
-  background: linear-gradient(180deg, transparent 0%, rgba(20, 20, 18, 0.24) 20%, rgba(20, 20, 18, 0.76) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(94, 81, 93, 0.16) 20%, rgba(94, 81, 93, 0.64) 100%);
 }
 
 .hero-kicker,
@@ -128,11 +129,12 @@ iframe {
   margin: 0;
   font-size: 2.2rem;
   line-height: 1.35;
+  color: #fffaf8;
 }
 
 .hero-meta {
   margin: 14px 0 0;
-  color: rgba(246, 244, 234, 0.86);
+  color: rgba(248, 246, 244, 0.96);
   font-size: 0.98rem;
   line-height: 1.7;
 }
@@ -143,9 +145,9 @@ iframe {
   bottom: 26px;
   z-index: 2;
   transform: translateX(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(20, 20, 18, 0.28);
-  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(248, 246, 244, 0.48);
+  color: #5e515d;
   border-radius: 999px;
   padding: 10px 16px;
   display: inline-flex;
@@ -208,10 +210,53 @@ iframe {
 .contact-preview,
 .countdown-card,
 .location-card,
-.rsvp-preview,
+ .bus-preview,
 .guestbook-form-card {
   border-radius: var(--radius-lg);
   padding: 24px;
+}
+
+.audio-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-radius: 24px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+
+.audio-player__copy {
+  min-width: 0;
+}
+
+.audio-player__status {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.audio-player__controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.audio-button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(181, 168, 185, 0.15);
+}
+
+.audio-button:hover,
+.audio-button:active {
+  border-color: var(--accent-strong);
+  background: #fff;
 }
 
 .invitation-card {
@@ -298,9 +343,9 @@ iframe {
   min-width: 86px;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--accent);
-  border: 1px solid rgba(216, 229, 146, 0.2);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--secondary);
+  border: 1px solid rgba(181, 168, 185, 0.28);
 }
 
 .primary-button,
@@ -325,7 +370,7 @@ iframe {
   padding: 14px 18px;
   font-weight: 700;
   background: var(--accent);
-  color: #303222;
+  color: #5c4344;
 }
 
 .primary-button:hover,
@@ -335,8 +380,8 @@ iframe {
 .toggle-button.is-selected,
 .choice-pill input:checked + span {
   background: var(--accent-strong);
-  color: #2b2d1f;
-  box-shadow: 0 12px 24px rgba(216, 229, 146, 0.18);
+  color: #5a4344;
+  box-shadow: 0 12px 24px rgba(242, 184, 181, 0.24);
 }
 
 .secondary-button,
@@ -344,9 +389,9 @@ iframe {
 .accordion-trigger,
 .toggle-button,
 .icon-button {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.7);
   color: var(--text-main);
-  border-color: rgba(216, 229, 146, 0.18);
+  border-color: rgba(181, 168, 185, 0.26);
 }
 
 .secondary-button:hover,
@@ -360,7 +405,7 @@ iframe {
 .toggle-button:active,
 .icon-button:active {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-strong);
 }
 
 .gallery-track {
@@ -424,7 +469,7 @@ iframe {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(181, 168, 185, 0.3);
 }
 
 .gallery-dots .is-active {
@@ -436,9 +481,9 @@ iframe {
 .calendar-card {
   margin-top: 24px;
   padding: 18px;
-  background: rgba(20, 20, 18, 0.22);
+  background: rgba(255, 255, 255, 0.72);
   border-radius: 24px;
-  border: 1px solid rgba(216, 229, 146, 0.12);
+  border: 1px solid rgba(181, 168, 185, 0.16);
 }
 
 .calendar-header {
@@ -477,7 +522,7 @@ iframe {
 .calendar-cell {
   min-height: 42px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.72);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -491,7 +536,7 @@ iframe {
 
 .calendar-cell.is-highlight {
   background: var(--accent);
-  color: #2f3223;
+  color: #5a4344;
   font-weight: 700;
 }
 
@@ -510,7 +555,7 @@ iframe {
   min-height: 240px;
   overflow: hidden;
   border-radius: 22px;
-  background: rgba(20, 20, 18, 0.28);
+  background: rgba(230, 222, 231, 0.45);
 }
 
 .map-placeholder,
@@ -519,8 +564,8 @@ iframe {
   height: 100%;
   position: relative;
   background:
-    radial-gradient(circle at 20% 20%, rgba(216, 229, 146, 0.18), transparent 25%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    radial-gradient(circle at 20% 20%, rgba(242, 184, 181, 0.28), transparent 25%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(236, 229, 238, 0.72));
 }
 
 .map-placeholder::after,
@@ -531,7 +576,7 @@ iframe {
   display: inline-flex;
   padding: 9px 12px;
   border-radius: 999px;
-  background: rgba(20, 20, 18, 0.48);
+  background: rgba(94, 81, 93, 0.62);
   color: var(--accent-strong);
   font-size: 0.86rem;
 }
@@ -573,7 +618,7 @@ iframe {
   min-height: 160px;
   overflow: hidden;
   border-radius: 18px;
-  background: rgba(20, 20, 18, 0.18);
+  background: rgba(230, 222, 231, 0.35);
 }
 
 .parking-image img,
@@ -701,15 +746,15 @@ iframe {
   width: 100%;
   padding: 14px 16px;
   border-radius: 18px;
-  border: 1px solid rgba(216, 229, 146, 0.16);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(181, 168, 185, 0.24);
+  background: rgba(255, 255, 255, 0.82);
   color: var(--text-main);
   outline: none;
 }
 
 .text-input::placeholder,
 .text-area::placeholder {
-  color: rgba(246, 244, 234, 0.42);
+  color: rgba(94, 81, 93, 0.42);
 }
 
 .text-input:focus,
@@ -717,7 +762,7 @@ iframe {
 .text-input.is-valid,
 .text-area.is-valid {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(216, 229, 146, 0.12);
+  box-shadow: 0 0 0 3px rgba(242, 184, 181, 0.18);
 }
 
 .text-input.is-invalid,
@@ -763,8 +808,8 @@ iframe {
   min-height: 50px;
   padding: 12px 14px;
   border-radius: 18px;
-  border: 1px solid rgba(216, 229, 146, 0.18);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(181, 168, 185, 0.24);
+  background: rgba(255, 255, 255, 0.78);
   color: var(--text-main);
 }
 
@@ -829,7 +874,7 @@ iframe {
   padding: 18px;
   text-align: center;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .footer-section {
@@ -843,7 +888,7 @@ iframe {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(14, 16, 12, 0.66);
+  background: rgba(94, 81, 93, 0.42);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -864,8 +909,8 @@ iframe {
   position: relative;
   border-radius: 28px;
   padding: 22px;
-  background: #525640;
-  border: 1px solid rgba(216, 229, 146, 0.24);
+  background: #f8f6f4;
+  border: 1px solid rgba(181, 168, 185, 0.3);
   box-shadow: var(--shadow);
   opacity: 0;
   transform: translateY(18px);
@@ -874,8 +919,8 @@ iframe {
 
 .contact-modal-panel {
   background:
-    radial-gradient(circle at 22px 22px, rgba(216, 229, 146, 0.22) 2px, transparent 0) 0 0 / 22px 22px,
-    linear-gradient(180deg, #545842 0%, #4a4e39 100%);
+    radial-gradient(circle at 22px 22px, rgba(242, 184, 181, 0.28) 2px, transparent 0) 0 0 / 22px 22px,
+    linear-gradient(180deg, #fffaf8 0%, #f4edf1 100%);
 }
 
 .modal-overlay.is-open .modal-panel {
@@ -888,7 +933,7 @@ iframe {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 14px 14px, rgba(216, 229, 146, 0.16) 1.5px, transparent 0) 0 0 / 18px 18px;
+    radial-gradient(circle at 14px 14px, rgba(181, 168, 185, 0.18) 1.5px, transparent 0) 0 0 / 18px 18px;
   opacity: 0.5;
 }
 
@@ -908,7 +953,7 @@ iframe {
   height: 40px;
   border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.82);
   color: var(--accent);
   font-size: 1.4rem;
   cursor: pointer;
@@ -926,8 +971,14 @@ iframe {
 .contact-column {
   padding: 16px;
   border-radius: 22px;
-  background: rgba(20, 20, 18, 0.16);
-  border: 1px solid rgba(216, 229, 146, 0.16);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(181, 168, 185, 0.2);
+}
+
+.modal-description {
+  margin: -6px 0 18px;
+  color: var(--text-muted);
+  line-height: 1.7;
 }
 
 .contact-column h4 {
@@ -1007,8 +1058,8 @@ iframe {
   max-width: calc(100vw - 40px);
   padding: 14px 18px;
   border-radius: 999px;
-  background: rgba(20, 20, 18, 0.84);
-  color: var(--accent-strong);
+  background: rgba(94, 81, 93, 0.92);
+  color: #fffaf8;
   text-align: center;
   opacity: 0;
   pointer-events: none;
@@ -1088,5 +1139,14 @@ body.modal-open {
   .action-row,
   .footer-actions {
     grid-template-columns: 1fr;
+  }
+
+  .audio-player {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .audio-player__controls {
+    justify-content: flex-start;
   }
 }

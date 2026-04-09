@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#474a37" />
+    <meta name="theme-color" content="#F8F6F4" />
     <title>김창욱 · 한진주 모바일 청첩장</title>
     <meta name="description" content="김창욱 · 한진주의 모바일 청첩장에 초대합니다." />
     <meta property="og:type" content="website" />
@@ -50,6 +50,19 @@
       <div class="section-divider" aria-hidden="true">✦</div>
 
       <section class="section invitation-section reveal" id="invitationSection">
+        <div class="audio-player glass-card">
+          <div class="audio-player__copy">
+            <p class="section-label">BGM</p>
+            <p class="audio-player__status" id="audioStatus">배경음악을 준비했어요.</p>
+          </div>
+          <div class="audio-player__controls">
+            <button class="audio-button" id="audioMuteButton" type="button" aria-label="음소거 전환" title="음소거 전환">🔇</button>
+            <button class="audio-button" id="audioPlayButton" type="button" aria-label="재생" title="재생">▶️</button>
+            <button class="audio-button" id="audioPauseButton" type="button" aria-label="일시정지" title="일시정지">⏸️</button>
+            <button class="audio-button" id="audioRestartButton" type="button" aria-label="처음부터 재생" title="처음부터 재생">⏮️</button>
+          </div>
+          <audio id="bgmAudio" loop preload="auto"></audio>
+        </div>
         <div class="section-heading">
           <p class="section-label">Invitation</p>
           <h2>초대합니다</h2>
@@ -175,16 +188,17 @@
 
       <div class="section-divider" aria-hidden="true">✦</div>
 
-      <section class="section reveal" id="rsvpSection">
+      <section class="section reveal" id="busSection">
         <div class="section-heading">
-          <p class="section-label">RSVP</p>
-          <h2>참석 여부</h2>
+          <p class="section-label">Bus</p>
+          <h2>하객 버스 탑승 여부</h2>
         </div>
-        <article class="glass-card rsvp-preview">
-          <p class="section-copy">
-            참석 여부를 미리 알려주시면 더 정성껏 준비하겠습니다.
+        <article class="glass-card bus-preview">
+          <p class="section-copy" id="busSectionCopy">
+            귀한 걸음 해주시는 분들을 편하게 모시고자 좌석이 부족하지 않도록 탑승 조사를 하고 있습니다.
+            포항-인천 간의 대절 버스 이용 여부를 알려주시면 감사하겠습니다.
           </p>
-          <button class="primary-button" id="openRsvpModal" type="button">참석 의사 전달하기</button>
+          <button class="primary-button" id="openBusModal" type="button">하객 버스 탑승 안내</button>
         </article>
       </section>
 
@@ -241,91 +255,91 @@
       </div>
     </div>
 
-    <div class="modal-overlay bottom-sheet-overlay" id="rsvpModal" aria-hidden="true">
-      <div class="modal-panel bottom-sheet" role="dialog" aria-modal="true" aria-labelledby="rsvpModalTitle">
-        <button class="modal-close" type="button" data-close-modal="#rsvpModal" aria-label="닫기">×</button>
-        <h3 id="rsvpModalTitle">참석 의사 전달하기</h3>
-        <form id="rsvpForm" novalidate>
+    <div class="modal-overlay bottom-sheet-overlay" id="busModal" aria-hidden="true">
+      <div class="modal-panel bottom-sheet" role="dialog" aria-modal="true" aria-labelledby="busModalTitle">
+        <button class="modal-close" type="button" data-close-modal="#busModal" aria-label="닫기">×</button>
+        <h3 id="busModalTitle">하객 버스 탑승 안내</h3>
+        <p class="modal-description" id="busModalDescription">
+          귀한 걸음 해주시는 분들을 편하게 모시고자 좌석이 부족하지 않도록 탑승 조사를 하고 있습니다.
+          포항-인천 간의 대절 버스 이용 여부를 알려주시면 감사하겠습니다.
+        </p>
+        <form id="busForm" novalidate>
           <div class="field-group">
             <span class="field-label">구분</span>
-            <div class="toggle-group" id="sideToggleGroup">
+            <div class="toggle-group" id="busSideToggleGroup">
               <button class="toggle-button is-selected" type="button" data-side="신랑측">신랑측</button>
               <button class="toggle-button" type="button" data-side="신부측">신부측</button>
             </div>
-            <input id="rsvpSide" name="side" type="hidden" value="신랑측" />
+            <input id="busSide" name="side" type="hidden" value="신랑측" />
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="rsvpName">성함</label>
-            <input class="text-input" id="rsvpName" name="name" type="text" placeholder="성함을 입력해 주세요" required />
+            <label class="field-label" for="busName">성함</label>
+            <input class="text-input" id="busName" name="name" type="text" placeholder="성함을 입력해 주세요" required />
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="rsvpPhone">연락처</label>
-            <input class="text-input" id="rsvpPhone" name="phone" type="tel" placeholder="연락 가능한 번호를 입력해 주세요" required />
+            <label class="field-label" for="busPhone">연락처</label>
+            <input class="text-input" id="busPhone" name="phone" type="tel" placeholder="연락 가능한 번호를 입력해 주세요" required />
           </div>
 
           <div class="field-group">
-            <span class="field-label">참석 여부</span>
-            <div class="choice-row" id="attendanceChoices">
+            <span class="field-label">포항 → 인천 버스 탑승 여부</span>
+            <div class="choice-row" id="outboundBusChoices">
               <label class="choice-pill">
-                <input type="radio" name="attendance" value="참석" required />
-                <span>참석</span>
+                <input type="radio" name="outbound_bus" value="탑승" required />
+                <span>탑승</span>
               </label>
               <label class="choice-pill">
-                <input type="radio" name="attendance" value="불참석" />
-                <span>불참석</span>
+                <input type="radio" name="outbound_bus" value="미탑승" />
+                <span>미탑승</span>
               </label>
             </div>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="rsvpGuestCount">참석인원</label>
+            <label class="field-label" for="outboundGuestCount">탑승 인원 (본인 포함)</label>
             <input
               class="text-input"
-              id="rsvpGuestCount"
-              name="guest_count"
+              id="outboundGuestCount"
+              name="outbound_guest_count"
               type="number"
-              min="1"
-              placeholder="본인 포함 총 참석인원"
-              required
+              min="0"
+              placeholder="본인 포함 총 탑승인원"
             />
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="rsvpCompanion">동행인</label>
-            <input
-              class="text-input"
-              id="rsvpCompanion"
-              name="companions"
-              type="text"
-              placeholder="함께 오시는 분 성함"
-            />
-          </div>
-
-          <div class="field-group">
-            <span class="field-label">식사 여부</span>
-            <div class="choice-row meal-choices" id="mealChoices">
+            <span class="field-label">인천 → 포항 버스 탑승 여부</span>
+            <div class="choice-row" id="returnBusChoices">
               <label class="choice-pill">
-                <input type="radio" name="meal_preference" value="예정" required />
-                <span>예정</span>
+                <input type="radio" name="return_bus" value="탑승" required />
+                <span>탑승</span>
               </label>
               <label class="choice-pill">
-                <input type="radio" name="meal_preference" value="안함" />
-                <span>안함</span>
-              </label>
-              <label class="choice-pill">
-                <input type="radio" name="meal_preference" value="미정" />
-                <span>미정</span>
+                <input type="radio" name="return_bus" value="미탑승" />
+                <span>미탑승</span>
               </label>
             </div>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="rsvpMessage">전하실 말씀</label>
+            <label class="field-label" for="returnGuestCount">탑승 인원 (본인 포함)</label>
+            <input
+              class="text-input"
+              id="returnGuestCount"
+              name="return_guest_count"
+              type="number"
+              min="0"
+              placeholder="본인 포함 총 탑승인원"
+            />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="busMessage">전하실 말씀</label>
             <textarea
               class="text-input text-area"
-              id="rsvpMessage"
+              id="busMessage"
               name="message"
               rows="3"
               placeholder="남기실 말씀이 있다면 입력해 주세요"
@@ -333,11 +347,11 @@
           </div>
 
           <label class="checkbox-row">
-            <input id="hideRsvpToday" type="checkbox" />
+            <input id="hideBusToday" type="checkbox" />
             <span>오늘 하루 보지 않기</span>
           </label>
 
-          <button class="primary-button" type="submit">참석 의사 전달하기</button>
+          <button class="primary-button" type="submit">버스 탑승 여부 전달하기</button>
         </form>
       </div>
     </div>
