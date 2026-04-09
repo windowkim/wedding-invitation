@@ -510,7 +510,7 @@ function renderCountdown() {
     const seconds = Math.floor((safeDiff / 1000) % 60);
 
     message.textContent = `${CONFIG.couple.groom.name} ❤️ ${CONFIG.couple.bride.name}의 결혼식이 ${days}일 남았습니다`;
-    live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시까지 ${hours}시간 ${minutes}분 ${seconds}초`;
+    live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
   };
 
   update();
