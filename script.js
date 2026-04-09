@@ -367,6 +367,8 @@ function renderContacts() {
 function renderGallery() {
   const track = document.getElementById('galleryTrack');
   const dots = document.getElementById('galleryDots');
+  const prevButton = document.getElementById('galleryPrevButton');
+  const nextButton = document.getElementById('galleryNextButton');
   const galleryImages = CONFIG.gallery.images.filter((item) => item && item.src && !isPlaceholderValue(item.src));
 
   if (!galleryImages.length) {
@@ -377,6 +379,8 @@ function renderGallery() {
       </article>
     `;
     dots.innerHTML = '';
+    prevButton.disabled = true;
+    nextButton.disabled = true;
     return;
   }
 
@@ -404,7 +408,14 @@ function renderGallery() {
     .map((_, index) => `<span class="${index === 0 ? 'is-active' : ''}"></span>`)
     .join('');
 
+  const updateGalleryControls = () => {
+    const maxScrollLeft = track.scrollWidth - track.clientWidth;
+    prevButton.disabled = track.scrollLeft <= 8;
+    nextButton.disabled = track.scrollLeft >= maxScrollLeft - 8;
+  };
+
   if (track.dataset.scrollBound === 'true') {
+    updateGalleryControls();
     return;
   }
 
@@ -422,7 +433,26 @@ function renderGallery() {
     [...dots.children].forEach((dot, index) => {
       dot.classList.toggle('is-active', index === activeIndex);
     });
+
+    updateGalleryControls();
   });
+
+  const scrollGalleryBy = (direction) => {
+    const cards = [...track.children];
+    const firstCard = cards[0];
+    if (!firstCard) return;
+
+    const cardWidth = firstCard.getBoundingClientRect().width + 14;
+    track.scrollBy({
+      left: cardWidth * direction,
+      behavior: 'smooth',
+    });
+  };
+
+  prevButton.addEventListener('click', () => scrollGalleryBy(-1));
+  nextButton.addEventListener('click', () => scrollGalleryBy(1));
+
+  updateGalleryControls();
   track.dataset.scrollBound = 'true';
 }
 
