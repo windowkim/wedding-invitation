@@ -5,6 +5,7 @@ const CONFIG = {
     heroImage: '/images/main.jpeg',
     shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/main.jpeg',
     backgroundMusic: '/bgms/the_day_we_met_first_swing_ver.mp3',
+    backgroundMusicLabel: '우리가 처음 만난 날 (작사/작곡 김헌).',
     heroKicker: 'Wedding Invitation',
   },
   kakao: {
@@ -1052,6 +1053,26 @@ function bindAudioControls() {
     muteButton.textContent = audio.muted ? '🔇' : '🔊';
   };
 
+  const tryAutoPlay = async () => {
+    try {
+      audio.muted = false;
+      await audio.play();
+      updateAudioStatus('배경음악이 자동으로 재생 중이에요.');
+      return;
+    } catch (error) {
+      try {
+        audio.muted = true;
+        await audio.play();
+        updateAudioStatus('배경음악이 자동 재생 중이에요. 음소거를 해제해 주세요.');
+      } catch (mutedError) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.muted = true;
+        updateAudioStatus(CONFIG.site.backgroundMusicLabel || '배경음악을 준비했어요.');
+      }
+    }
+  };
+
   playButton.addEventListener('click', async () => {
     try {
       audio.muted = false;
@@ -1084,7 +1105,8 @@ function bindAudioControls() {
   });
 
   audio.addEventListener('ended', () => updateAudioStatus('배경음악이 끝났어요.'));
-  updateAudioStatus('배경음악을 준비했어요.');
+  updateAudioStatus(CONFIG.site.backgroundMusicLabel || '배경음악을 준비했어요.');
+  tryAutoPlay();
 }
 
 function bindRevealAnimation() {
