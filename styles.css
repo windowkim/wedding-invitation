@@ -436,6 +436,7 @@ iframe {
 }
 
 .gallery-nav {
+  display: none;
   position: absolute;
   top: 50%;
   z-index: 2;
@@ -445,9 +446,6 @@ iframe {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.82);
   color: var(--accent-strong);
-  font-size: 1.8rem;
-  line-height: 1;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 10px 24px rgba(118, 104, 115, 0.12);
@@ -455,16 +453,26 @@ iframe {
 }
 
 .gallery-nav--prev {
-  left: -8px;
+  left: 10px;
 }
 
 .gallery-nav--next {
-  right: -8px;
+  right: 10px;
 }
 
 .gallery-nav:disabled {
   opacity: 0.42;
   cursor: default;
+}
+
+.gallery-nav svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .gallery-item {
@@ -1254,6 +1262,12 @@ body.modal-open {
   .bottom-sheet {
     margin: 0 auto;
     border-radius: 28px;
+  }
+}
+
+@media (min-width: 768px) {
+  .gallery-nav {
+    display: inline-flex;
   }
 }
 
