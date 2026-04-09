@@ -1042,11 +1042,13 @@ function bindAudioControls() {
   const playButton = document.getElementById('audioPlayButton');
   const pauseButton = document.getElementById('audioPauseButton');
   const restartButton = document.getElementById('audioRestartButton');
+  const audioTitle = document.getElementById('audioTitle');
   const audioStatus = document.getElementById('audioStatus');
 
   audio.src = resolveAssetUrl(CONFIG.site.backgroundMusic);
   audio.volume = 0.6;
   audio.muted = true;
+  audioTitle.textContent = CONFIG.site.backgroundMusicLabel || '배경음악';
 
   const updateAudioStatus = (message) => {
     audioStatus.textContent = message;
@@ -1068,7 +1070,7 @@ function bindAudioControls() {
         audio.pause();
         audio.currentTime = 0;
         audio.muted = true;
-        updateAudioStatus(CONFIG.site.backgroundMusicLabel || '배경음악을 준비했어요.');
+        updateAudioStatus('배경음악을 준비하고 있어요.');
       }
     }
   };
@@ -1105,7 +1107,7 @@ function bindAudioControls() {
   });
 
   audio.addEventListener('ended', () => updateAudioStatus('배경음악이 끝났어요.'));
-  updateAudioStatus(CONFIG.site.backgroundMusicLabel || '배경음악을 준비했어요.');
+  updateAudioStatus('배경음악을 준비하고 있어요.');
   tryAutoPlay();
 }
 
