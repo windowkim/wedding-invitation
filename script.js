@@ -88,10 +88,12 @@ const CONFIG = {
   },
   gallery: {
     images: [
-      { src: '/images/gallery/1.JPG', alt: '사진 1' },
-      { src: '/images/gallery/2.JPG', alt: '사진 2' },
-      { src: '/images/gallery/3.JPG', alt: '사진 3' },
-      { src: '/images/gallery/4.JPG', alt: '사진 4' },
+      { src: '/images/gallery/1.jpeg', alt: '사진 1' },
+      { src: '/images/gallery/2.jpeg', alt: '사진 2' },
+      { src: '/images/gallery/3.jpeg', alt: '사진 3' },
+      { src: '/images/gallery/4.jpeg', alt: '사진 4' },
+      { src: '/images/gallery/5.jpeg', alt: '사진 5' },
+      { src: '/images/gallery/6.jpeg', alt: '사진 6' },
     ],
   },
   location: {
@@ -383,8 +385,16 @@ function renderGallery() {
       const media = createImageMarkup(item.src, item.alt, item.alt);
       return `
         <article class="gallery-item">
-          ${media}
-          <span class="gallery-caption">${escapeHtml(item.alt || `사진 ${index + 1}`)}</span>
+          <button
+            class="gallery-item-button"
+            type="button"
+            data-gallery-src="${escapeHtml(resolveAssetUrl(item.src))}"
+            data-gallery-alt="${escapeHtml(item.alt || `사진 ${index + 1}`)}"
+            aria-label="${escapeHtml((item.alt || `사진 ${index + 1}`) + ' 크게 보기')}"
+          >
+            ${media}
+            <span class="gallery-caption">${escapeHtml(item.alt || `사진 ${index + 1}`)}</span>
+          </button>
         </article>
       `;
     })
@@ -920,6 +930,8 @@ function closeModal(modal) {
 function bindModals() {
   const contactModal = document.getElementById('contactModal');
   const busModal = document.getElementById('busModal');
+  const galleryModal = document.getElementById('galleryModal');
+  const modalList = [contactModal, busModal, galleryModal];
 
   document.getElementById('openContactModal').addEventListener('click', () => openModal(contactModal));
   document.getElementById('openBusModal').addEventListener('click', () => openModal(busModal));
@@ -934,7 +946,7 @@ function bindModals() {
     });
   });
 
-  [contactModal, busModal].forEach((modal) => {
+  modalList.forEach((modal) => {
     modal.addEventListener('click', (event) => {
       if (event.target === modal) {
         closeModal(modal);
@@ -944,14 +956,30 @@ function bindModals() {
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
-      closeModal(contactModal);
-      closeModal(busModal);
+      modalList.forEach((modal) => closeModal(modal));
     }
   });
 
   if (localStorage.getItem(CONFIG.busSurvey.popupDismissKey) !== getTodayKey()) {
     window.setTimeout(() => openModal(busModal), CONFIG.busSurvey.autoPopupDelayMs);
   }
+}
+
+function bindGalleryLightbox() {
+  const galleryModal = document.getElementById('galleryModal');
+  const galleryModalImage = document.getElementById('galleryModalImage');
+  const galleryModalCaption = document.getElementById('galleryModalCaption');
+  const galleryTrack = document.getElementById('galleryTrack');
+
+  galleryTrack.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-gallery-src]');
+    if (!trigger) return;
+
+    galleryModalImage.src = trigger.dataset.gallerySrc || '';
+    galleryModalImage.alt = trigger.dataset.galleryAlt || '갤러리 이미지';
+    galleryModalCaption.textContent = trigger.dataset.galleryAlt || '';
+    openModal(galleryModal);
+  });
 }
 
 function bindScrollIndicator() {
@@ -1165,6 +1193,7 @@ async function initialize() {
   renderGuestbook();
   bindForms();
   bindModals();
+  bindGalleryLightbox();
   bindScrollIndicator();
   bindShareButtons();
   bindAudioControls();

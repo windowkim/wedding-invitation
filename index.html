@@ -357,6 +357,17 @@
       </div>
     </div>
 
+    <div class="modal-overlay gallery-modal-overlay" id="galleryModal" aria-hidden="true">
+      <div class="modal-panel gallery-modal-panel" role="dialog" aria-modal="true" aria-labelledby="galleryModalTitle">
+        <button class="modal-close" type="button" data-close-modal="#galleryModal" aria-label="닫기">×</button>
+        <h3 id="galleryModalTitle">사진 크게 보기</h3>
+        <div class="gallery-modal-media">
+          <img id="galleryModalImage" alt="" loading="lazy" />
+        </div>
+        <p class="gallery-modal-caption" id="galleryModalCaption"></p>
+      </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.0/kakao.min.js" crossorigin="anonymous"></script>
