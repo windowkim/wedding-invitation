@@ -178,6 +178,116 @@ from public.bus_survey_submissions;
 - `outbound_rider_names`: `포항 -> 인천`에 `탑승`이라고 남긴 하객 이름 목록
 - `return_rider_names`: `인천 -> 포항`에 `탑승`이라고 남긴 하객 이름 목록
 
+### 3-2. 로그인 없이 보는 관리자 URL 만들기
+
+`bus-admin-q7r4m2.html` 페이지는 URL 뒤에 붙는 비밀키가 맞을 때만 버스 신청 정보를 불러오도록 설계되어 있습니다.
+
+관리자 페이지 URL 예시:
+
+```text
+https://windowkim.github.io/wedding-invitation/bus-admin-q7r4m2.html#k=여기에_아주_긴_비밀키
+```
+
+중요:
+
+- `#k=...` 뒤의 해시(fragment)는 서버 로그에 일반 쿼리스트링보다 덜 남습니다.
+- 그래도 이 URL을 아는 사람은 누구나 접근할 수 있으므로, 나와 아내만 보관해야 합니다.
+
+아래 SQL을 `SQL Editor`에서 실행하면 관리자 URL 전용 읽기 정책과 View가 생성됩니다.
+
+```sql
+create schema if not exists private;
+
+create table if not exists private.app_secrets (
+  key text primary key,
+  value text not null
+);
+
+insert into private.app_secrets (key, value)
+values ('bus_admin_key', 'CHANGE_THIS_TO_A_LONG_RANDOM_SECRET')
+on conflict (key)
+do update set value = excluded.value;
+
+create or replace function private.has_valid_bus_admin_key()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select coalesce(
+    (current_setting('request.headers', true)::json ->> 'x-bus-admin-key') =
+    (select s.value from private.app_secrets s where s.key = 'bus_admin_key' limit 1),
+    false
+  );
+$$;
+
+revoke all on schema private from public, anon, authenticated;
+revoke all on all tables in schema private from public, anon, authenticated;
+
+drop policy if exists "bus admin select by secret" on public.bus_survey_submissions;
+create policy "bus admin select by secret"
+  on public.bus_survey_submissions
+  for select
+  to anon
+  using (private.has_valid_bus_admin_key());
+
+create or replace view public.bus_admin_view
+with (security_invoker = true)
+as
+select
+  created_at,
+  side,
+  name,
+  phone,
+  outbound_bus,
+  outbound_guest_count,
+  return_bus,
+  return_guest_count,
+  coalesce(outbound_guest_count, 0) + coalesce(return_guest_count, 0) as requested_total
+from public.bus_survey_submissions
+order by created_at desc;
+
+grant select on public.bus_admin_view to anon;
+```
+
+실행 후 사용 순서:
+
+1. 위 SQL의 `CHANGE_THIS_TO_A_LONG_RANDOM_SECRET`를 아주 긴 랜덤 문자열로 바꿔서 실행
+2. 아래 주소 형식으로 접속
+3. `#k=` 뒤에 같은 비밀키를 붙여 사용
+
+```text
+https://windowkim.github.io/wedding-invitation/bus-admin-q7r4m2.html#k=같은_비밀키
+```
+
+이 관리자 페이지에서 볼 수 있는 것:
+
+- 포항 → 인천 총 탑승 인원
+- 인천 → 포항 총 탑승 인원
+- 각 방향 탑승자 이름 목록
+- 신청자별 이름 / 연락처 / 왕복 신청 인원 / 총 합계
+
+유출 시 막는 방법:
+
+1. 가장 빠른 방법: 비밀키 교체
+
+```sql
+update private.app_secrets
+set value = 'NEW_LONG_RANDOM_SECRET'
+where key = 'bus_admin_key';
+```
+
+그리고 새 비밀키로 URL의 `#k=` 값도 바꾸면 됩니다. 기존 URL은 즉시 막힙니다.
+
+2. 긴급 차단: 읽기 정책 자체 삭제
+
+```sql
+drop policy if exists "bus admin select by secret" on public.bus_survey_submissions;
+```
+
+이렇게 하면 관리자 URL이 전부 막힙니다.
+
 ### 4. 아직 Supabase를 연결하지 않았다면
 
 지금처럼 브라우저 `localStorage`에만 저장됩니다. 이 경우에는 제출한 사람 본인 브라우저에서만 볼 수 있습니다.
