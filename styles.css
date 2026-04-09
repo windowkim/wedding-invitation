@@ -515,13 +515,15 @@ iframe {
 
 .calendar-header h3 {
   margin: 0;
-  font-size: 1.18rem;
+  font-size: clamp(1rem, 4.2vw, 1.18rem);
+  white-space: nowrap;
 }
 
 .calendar-helper {
   margin: 0;
   text-align: right;
-  font-size: 0.84rem;
+  font-size: clamp(0.7rem, 2.9vw, 0.84rem);
+  white-space: nowrap;
 }
 
 .calendar-weekdays,
@@ -566,11 +568,16 @@ iframe {
   margin: 0;
   color: var(--accent-strong);
   font-family: 'Gowun Batang', serif;
-  font-size: 1.14rem;
+  font-size: clamp(0.98rem, 4vw, 1.14rem);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .countdown-live {
   margin: 12px 0 0;
+  font-size: clamp(0.88rem, 3.6vw, 1rem);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .map-frame {
@@ -684,6 +691,22 @@ iframe {
   padding: 18px;
 }
 
+.guide-card--text-only {
+  min-height: auto;
+  padding: 22px 20px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(181, 168, 185, 0.18);
+}
+
+.guide-card--text-only::after {
+  display: none;
+}
+
+.guide-card--text-only .guide-card__body {
+  position: static;
+  padding: 0;
+}
+
 .guide-card__title {
   margin: 0 0 6px;
   font-family: 'Gowun Batang', serif;
@@ -694,6 +717,10 @@ iframe {
   margin: 0;
   color: rgba(246, 244, 234, 0.88);
   line-height: 1.65;
+}
+
+.guide-card--text-only .guide-card__text {
+  color: var(--text-main);
 }
 
 .accordion-list {
@@ -1036,6 +1063,11 @@ iframe {
   margin: -6px 0 18px;
   color: var(--text-muted);
   line-height: 1.7;
+}
+
+#busSectionCopy,
+#busModalDescription {
+  white-space: pre-line;
 }
 
 .contact-column h4 {

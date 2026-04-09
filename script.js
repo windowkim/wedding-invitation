@@ -112,9 +112,8 @@ const CONFIG = {
   },
   venueGuide: {
     items: [
-      { title: '안내 1', image: '/images/<안내1 사진>', text: '<안내1 내용>' },
-      { title: '안내 2', image: '/images/<안내2 사진>', text: '<안내2 내용>' },
-      { title: '안내 3', image: '/images/<안내3 사진>', text: '<안내3 내용>' },
+      { title: '예식', text: '6층 팰리스홀' },
+      { title: '연회', text: '2시 30분부터 5시까지 이용 가능' },
     ],
   },
   accounts: {
@@ -284,13 +283,14 @@ function renderHero() {
 function renderBusSurveyCopy() {
   const busSectionCopy = document.getElementById('busSectionCopy');
   const busModalDescription = document.getElementById('busModalDescription');
+  const busCopy = [CONFIG.busSurvey.sectionCopy, CONFIG.location.charterBus].filter(Boolean).join('\n\n');
 
   if (busSectionCopy) {
-    busSectionCopy.textContent = CONFIG.busSurvey.sectionCopy;
+    busSectionCopy.textContent = busCopy;
   }
 
   if (busModalDescription) {
-    busModalDescription.textContent = CONFIG.busSurvey.sectionCopy;
+    busModalDescription.textContent = busCopy;
   }
 }
 
@@ -529,10 +529,8 @@ function renderVenueGuide() {
 
   grid.innerHTML = CONFIG.venueGuide.items
     .map((item) => {
-      const media = createImageMarkup(item.image, item.title, item.title);
       return `
-        <article class="guide-card">
-          ${media}
+        <article class="guide-card guide-card--text-only">
           <div class="guide-card__body">
             <h3 class="guide-card__title">${escapeHtml(item.title)}</h3>
             <p class="guide-card__text">${escapeHtml(item.text)}</p>
