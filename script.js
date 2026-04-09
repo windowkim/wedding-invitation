@@ -5,7 +5,7 @@ const CONFIG = {
     heroImage: '/images/main.jpeg',
     shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/main.jpeg',
     backgroundMusic: '/bgms/the_day_we_met_first_swing_ver.mp3',
-    backgroundMusicLabel: '우리가 처음 만난 날 (작사/작곡 김헌).',
+    backgroundMusicLabel: '우리가 처음 만난 날 (김헌 님이 선물해 주신 곡)',
     heroKicker: 'Wedding Invitation',
   },
   kakao: {
@@ -667,18 +667,39 @@ function renderGuestbook() {
   }
 
   emptyState.hidden = true;
-  grid.innerHTML = [...state.guestbookMessages]
+  const columns = [
+    { items: [], weight: 0 },
+    { items: [], weight: 0 },
+  ];
+
+  [...state.guestbookMessages]
     .reverse()
-    .map((message, index) => {
-      const color = CONFIG.guestbook.noteColors[message.colorIndex % CONFIG.guestbook.noteColors.length];
-      const rotation = index % 2 === 0 ? '-1.5deg' : '1.5deg';
-      return `
-        <article class="note-card" style="background:${color}; --rotate:${rotation};">
-          <h4>${escapeHtml(message.author)}</h4>
-          <p>${escapeHtml(message.content)}</p>
-          <small>${escapeHtml(message.createdAt)}</small>
-        </article>
-      `;
+    .forEach((message, index) => {
+      const targetColumn = columns[0].weight <= columns[1].weight ? columns[0] : columns[1];
+      const contentWeight = `${message.author}${message.content}`.length;
+
+      targetColumn.items.push({ message, index });
+      targetColumn.weight += contentWeight;
+    });
+
+  grid.innerHTML = columns
+    .map((column) => {
+      const cards = column.items
+        .map(({ message, index }) => {
+          const color = CONFIG.guestbook.noteColors[message.colorIndex % CONFIG.guestbook.noteColors.length];
+          const rotation = index % 2 === 0 ? '-1.5deg' : '1.5deg';
+
+          return `
+            <article class="note-card" style="background:${color}; --rotate:${rotation};">
+              <h4>${escapeHtml(message.author)}</h4>
+              <p>${escapeHtml(message.content)}</p>
+              <small>${escapeHtml(message.createdAt)}</small>
+            </article>
+          `;
+        })
+        .join('');
+
+      return `<div class="guestbook-column">${cards}</div>`;
     })
     .join('');
 }

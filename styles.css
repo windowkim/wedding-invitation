@@ -880,20 +880,26 @@ iframe {
 }
 
 .guestbook-grid {
-  column-count: 2;
-  column-gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   margin-top: 18px;
+  align-items: start;
+}
+
+.guestbook-column {
+  display: grid;
+  gap: 12px;
+  align-content: start;
 }
 
 .note-card {
-  display: inline-block;
   width: 100%;
-  margin: 0 0 12px;
+  margin: 0;
   padding: 16px;
   border-radius: 18px;
   color: #303222;
   transform: rotate(var(--rotate, 0deg));
-  break-inside: avoid;
 }
 
 .note-card h4,
