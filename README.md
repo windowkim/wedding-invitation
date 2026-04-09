@@ -60,6 +60,57 @@ GitHub Pages에 바로 올릴 수 있는 정적 모바일 청첩장입니다. `i
 
 `script.js` 안에 `TODO` 주석을 넣어 두었기 때문에 나중에 Lovable Cloud / Supabase로 연결하기 쉽습니다.
 
+## 하객 버스 탑승 정보 실제로 모으기
+
+지금 사이트는 `Supabase`를 연결하면 하객 버스 탑승 정보를 한 곳에 모아 볼 수 있게 준비되어 있습니다.
+
+### 1. Supabase 프로젝트 만들기
+
+1. `https://supabase.com/` 에서 새 프로젝트를 만듭니다.
+2. 프로젝트가 만들어지면 `Project URL`과 `anon public key`를 확인합니다.
+3. `script.js` 상단의 `CONFIG.supabase`에 붙여 넣습니다.
+
+```js
+supabase: {
+  url: '<SUPABASE_PROJECT_URL>',
+  anonKey: '<SUPABASE_ANON_KEY>',
+  busSurveyTable: 'bus_survey_submissions',
+},
+```
+
+### 2. SQL Editor에서 아래 SQL 실행
+
+```sql
+create table if not exists public.bus_survey_submissions (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  side text not null,
+  name text not null,
+  phone text not null,
+  outbound_bus text not null,
+  outbound_guest_count integer not null default 0,
+  return_bus text not null,
+  return_guest_count integer not null default 0,
+  message text
+);
+
+alter table public.bus_survey_submissions enable row level security;
+
+create policy "public insert bus survey"
+  on public.bus_survey_submissions
+  for insert
+  to anon
+  with check (true);
+```
+
+### 3. 어디서 확인하나
+
+응답은 Supabase Dashboard의 `Table Editor > bus_survey_submissions` 에서 확인하면 됩니다.
+
+### 4. 아직 Supabase를 연결하지 않았다면
+
+지금처럼 브라우저 `localStorage`에만 저장됩니다. 이 경우에는 제출한 사람 본인 브라우저에서만 볼 수 있습니다.
+
 ## Supabase / Lovable Cloud 연결용 SQL 예시
 
 아래 SQL은 사용자가 요청한 구조 기준입니다.

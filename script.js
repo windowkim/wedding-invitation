@@ -10,6 +10,11 @@ const CONFIG = {
   kakao: {
     javascriptKey: 'f6d0f3d1014d5ee4dcec9f03394e8b92',
   },
+  supabase: {
+    url: '<SUPABASE_PROJECT_URL>',
+    anonKey: '<SUPABASE_ANON_KEY>',
+    busSurveyTable: 'bus_survey_submissions',
+  },
   colors: {
     background: '#F8F6F4',
     accent: '#F2B8B5',
@@ -191,6 +196,16 @@ function resolveAssetUrl(value) {
   }
 
   return value;
+}
+
+function hasSupabaseBusConfig() {
+  return (
+    CONFIG.supabase &&
+    CONFIG.supabase.url &&
+    CONFIG.supabase.anonKey &&
+    !isPlaceholderValue(CONFIG.supabase.url) &&
+    !isPlaceholderValue(CONFIG.supabase.anonKey)
+  );
 }
 
 function getWeddingDate() {
@@ -622,9 +637,39 @@ function getStoredBusSurveySubmissions() {
 }
 
 async function submitBusSurvey(payload) {
+  if (hasSupabaseBusConfig()) {
+    const endpoint = `${CONFIG.supabase.url}/rest/v1/${CONFIG.supabase.busSurveyTable}`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: CONFIG.supabase.anonKey,
+        Authorization: `Bearer ${CONFIG.supabase.anonKey}`,
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({
+        side: payload.side,
+        name: payload.name,
+        phone: payload.phone,
+        outbound_bus: payload.outbound_bus,
+        outbound_guest_count: Number(payload.outbound_guest_count || 0),
+        return_bus: payload.return_bus,
+        return_guest_count: Number(payload.return_guest_count || 0),
+        message: payload.message,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Supabase insert failed');
+    }
+
+    return;
+  }
+
   const submissions = getStoredBusSurveySubmissions();
 
-  // TODO: Replace localStorage write with your backend or database if you want to collect every guest's response centrally.
+  // Fallback for local preview when Supabase is not configured yet.
   submissions.push({ ...payload, createdAt: new Date().toISOString() });
   localStorage.setItem(CONFIG.busSurvey.storageKey, JSON.stringify(submissions));
 }
@@ -722,19 +767,24 @@ function bindForms() {
       return;
     }
 
-    await submitBusSurvey(payload);
-    if (document.getElementById('hideBusToday').checked) {
-      localStorage.setItem(CONFIG.busSurvey.popupDismissKey, getTodayKey());
-    }
+    try {
+      await submitBusSurvey(payload);
+      if (document.getElementById('hideBusToday').checked) {
+        localStorage.setItem(CONFIG.busSurvey.popupDismissKey, getTodayKey());
+      }
 
-    busForm.reset();
-    sideInput.value = '신랑측';
-    document.querySelectorAll('#busSideToggleGroup .toggle-button').forEach((button, index) => {
-      button.classList.toggle('is-selected', index === 0);
-    });
-    busForm.querySelectorAll('.is-valid').forEach((field) => field.classList.remove('is-valid'));
-    closeModal(document.getElementById('busModal'));
-    showToast(CONFIG.busSurvey.submitSuccessMessage);
+      busForm.reset();
+      sideInput.value = '신랑측';
+      document.querySelectorAll('#busSideToggleGroup .toggle-button').forEach((button, index) => {
+        button.classList.toggle('is-selected', index === 0);
+      });
+      busForm.querySelectorAll('.is-valid').forEach((field) => field.classList.remove('is-valid'));
+      closeModal(document.getElementById('busModal'));
+      showToast(CONFIG.busSurvey.submitSuccessMessage);
+    } catch (error) {
+      console.error('Bus survey submission failed:', error);
+      showToast('저장에 실패했습니다. 설정을 확인해 주세요.');
+    }
   });
 }
 
