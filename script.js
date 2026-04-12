@@ -132,8 +132,8 @@ const CONFIG = {
     ],
   },
   accounts: {
-    groomSideLabel: '신랑측 계좌',
-    brideSideLabel: '신부측 계좌',
+    groomSideLabel: '신랑측',
+    brideSideLabel: '신부측',
     groom: [
       { holder: '김창욱', bank: '<은행명>', number: '<계좌 정보>' },
       { holder: '김준식', bank: '<은행명>', number: '<계좌 정보>' },
