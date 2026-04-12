@@ -88,12 +88,27 @@ const CONFIG = {
   },
   gallery: {
     images: [
-      { src: '/images/gallery/1.jpeg', alt: '사진 1' },
-      { src: '/images/gallery/2.jpeg', alt: '사진 2' },
-      { src: '/images/gallery/3.jpeg', alt: '사진 3' },
-      { src: '/images/gallery/4.jpeg', alt: '사진 4' },
-      { src: '/images/gallery/5.jpeg', alt: '사진 5' },
-      { src: '/images/gallery/6.jpeg', alt: '사진 6' },
+      { src: '/images/gallery/0.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/1.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/2.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/3.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/4.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/5.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/6.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/7.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/8.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/9.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/10.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/12.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/13.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/14.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/15.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/16.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/17.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/18.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/19.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/20.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/21.jpeg', alt: '갤러리 사진' },
     ],
   },
   location: {
@@ -386,18 +401,20 @@ function renderGallery() {
 
   track.innerHTML = galleryImages
     .map((item, index) => {
-      const media = createImageMarkup(item.src, item.alt, item.alt);
+      const imageAlt = item.alt || '갤러리 사진';
+      const caption = item.caption || '';
+      const media = createImageMarkup(item.src, imageAlt, caption || imageAlt);
       return `
         <article class="gallery-item">
           <button
             class="gallery-item-button"
             type="button"
             data-gallery-src="${escapeHtml(resolveAssetUrl(item.src))}"
-            data-gallery-alt="${escapeHtml(item.alt || `사진 ${index + 1}`)}"
-            aria-label="${escapeHtml((item.alt || `사진 ${index + 1}`) + ' 크게 보기')}"
+            data-gallery-alt="${escapeHtml(caption)}"
+            aria-label="${escapeHtml(`갤러리 사진 ${index + 1} 크게 보기`)}"
           >
             ${media}
-            <span class="gallery-caption">${escapeHtml(item.alt || `사진 ${index + 1}`)}</span>
+            ${caption ? `<span class="gallery-caption">${escapeHtml(caption)}</span>` : ''}
           </button>
         </article>
       `;
