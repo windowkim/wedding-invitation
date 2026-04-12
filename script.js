@@ -334,14 +334,10 @@ function renderInvitation() {
 }
 
 function renderContacts() {
-  const groomBadge = document.getElementById('contactBadgeGroom');
-  const brideBadge = document.getElementById('contactBadgeBride');
   const modalColumns = document.getElementById('contactColumns');
   const openButton = document.getElementById('openContactModal');
   const buttonColor = safeColor(CONFIG.colors.contactButtonBackground, CONFIG.colors.accent);
 
-  groomBadge.textContent = CONFIG.contact.groomSideLabel;
-  brideBadge.textContent = CONFIG.contact.brideSideLabel;
   openButton.style.backgroundColor = buttonColor;
 
   const createPeopleMarkup = (title, people) => {

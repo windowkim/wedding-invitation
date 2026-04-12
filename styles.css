@@ -339,14 +339,6 @@ iframe {
   font-size: 1.08rem;
 }
 
-.dual-badges {
-  display: flex;
-  gap: 10px;
-  margin: 18px 0 22px;
-  flex-wrap: wrap;
-}
-
-.dual-badges span,
 .side-chip {
   display: inline-flex;
   align-items: center;
