@@ -314,8 +314,9 @@ iframe {
 .invitation-message__verse {
   padding: 18px 16px;
   border-radius: 20px;
-  background: rgba(20, 20, 18, 0.18);
-  border: 1px solid rgba(216, 229, 146, 0.14);
+  background: linear-gradient(180deg, rgba(164, 124, 144, 0.92), rgba(142, 107, 127, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 32px rgba(142, 107, 127, 0.18);
   text-align: left;
 }
 
@@ -417,7 +418,7 @@ iframe {
 .gallery-track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 82%);
+  grid-auto-columns: 100%;
   gap: 14px;
   overflow-x: auto;
   padding-bottom: 10px;
@@ -478,8 +479,7 @@ iframe {
   border-radius: 24px;
   overflow: hidden;
   position: relative;
-  aspect-ratio: 3 / 4;
-  min-height: 0;
+  height: clamp(480px, 76vh, 680px);
 }
 
 .gallery-item-button {
@@ -722,12 +722,12 @@ iframe {
 
 .charter-bus-list {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .charter-bus-item {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .charter-bus-item__title {
@@ -1327,7 +1327,7 @@ body.modal-open {
   }
 
   .gallery-track {
-    grid-auto-columns: 88%;
+    grid-auto-columns: 100%;
   }
 
   .contact-columns,

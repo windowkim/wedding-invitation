@@ -125,13 +125,13 @@ const CONFIG = {
     charterBus: [
       {
         title: '포항 → 인천',
-        description: '출발 시간 및 장소: 9시 20분 효자교회 주차장, 9시 30분 포항공과대학교 C5 앞',
+        description: '출발 시간 및 장소: 9시 20분 효자교회 주차장, 9시 30분 포항공과대학교 동문',
         image: '/images/bus_pohang.png',
       },
       {
         title: '인천 → 포항',
         description: '출발 시간 및 장소: 18시 예식장 1층',
-        image: '/images/map.jpg',
+        image: '',
       },
     ],
   },
@@ -565,7 +565,10 @@ function renderLocation() {
   venueAddress.textContent = CONFIG.location.address;
   parkingImage.innerHTML = createImageMarkup(CONFIG.location.parkingImage, '주차 안내 이미지', '주차 안내 이미지를 추가하면 표시됩니다.');
   parkingInfo.textContent = CONFIG.location.parking;
-  transportInfo.textContent = [CONFIG.location.subway, CONFIG.location.bus].filter(Boolean).join(' / ');
+  transportInfo.textContent = [CONFIG.location.subway, CONFIG.location.bus]
+    .map((item) => (typeof item === 'string' ? item.trim() : item))
+    .filter(Boolean)
+    .join(' / ');
   charterBusInfo.innerHTML = renderCharterBusMarkup('location');
 
   if (isPlaceholderValue(CONFIG.location.embedUrl)) {
@@ -595,19 +598,24 @@ function renderCharterBusMarkup(variant = 'location') {
     <div class="charter-bus-list charter-bus-list--${variant}">
       ${CONFIG.location.charterBus
         .map((item) => {
-          const imageMarkup = createImageMarkup(
-            item.image,
-            `${item.title} 안내 이미지`,
-            `${item.title} 안내 이미지를 추가하면 표시됩니다.`,
-          );
+          const imageMarkup =
+            item.image && !isPlaceholderValue(item.image)
+              ? `
+                <div class="charter-bus-item__image">
+                  ${createImageMarkup(
+                    item.image,
+                    `${item.title} 안내 이미지`,
+                    `${item.title} 안내 이미지를 추가하면 표시됩니다.`,
+                  )}
+                </div>
+              `
+              : '';
 
           return `
             <div class="charter-bus-item">
               <p class="charter-bus-item__title">${escapeHtml(item.title)}</p>
               <p class="charter-bus-item__description">${escapeHtml(item.description)}</p>
-              <div class="charter-bus-item__image">
-                ${imageMarkup}
-              </div>
+              ${imageMarkup}
             </div>
           `;
         })
