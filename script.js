@@ -109,6 +109,7 @@ const CONFIG = {
       { src: '/images/gallery/19.jpeg', alt: '갤러리 사진' },
       { src: '/images/gallery/20.jpeg', alt: '갤러리 사진' },
       { src: '/images/gallery/21.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/IMG_3501.JPG', alt: '갤러리 사진' },
     ],
   },
   location: {
