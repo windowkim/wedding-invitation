@@ -323,12 +323,15 @@ iframe {
   margin: 0 0 12px;
   font-size: 0.94rem;
   line-height: 1.8;
+  color: rgba(255, 255, 255, 0.96);
 }
 
 .invitation-message__reference {
   margin-top: 16px;
-  color: var(--accent-strong);
-  font-family: 'Gowun Batang', serif;
+  color: rgba(255, 255, 255, 0.96);
+  font-family: inherit;
+  font-size: 0.94rem;
+  line-height: 1.8;
   text-align: right;
 }
 
@@ -414,7 +417,7 @@ iframe {
 .gallery-track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 82%;
+  grid-auto-columns: minmax(0, 82%);
   gap: 14px;
   overflow-x: auto;
   padding-bottom: 10px;
@@ -475,12 +478,14 @@ iframe {
   border-radius: 24px;
   overflow: hidden;
   position: relative;
-  min-height: 360px;
+  aspect-ratio: 3 / 4;
+  min-height: 0;
 }
 
 .gallery-item-button {
+  display: block;
   width: 100%;
-  min-height: 360px;
+  height: 100%;
   padding: 0;
   border: 0;
   background: transparent;
@@ -713,6 +718,41 @@ iframe {
 
 .info-list p {
   white-space: pre-line;
+}
+
+.charter-bus-list {
+  display: grid;
+  gap: 14px;
+}
+
+.charter-bus-item {
+  display: grid;
+  gap: 8px;
+}
+
+.charter-bus-item__title {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.charter-bus-item__description {
+  color: var(--text-main);
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.charter-bus-item__image {
+  min-height: 160px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgba(230, 222, 231, 0.35);
+}
+
+.charter-bus-item__image img,
+.charter-bus-item__image .image-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .guide-grid {
@@ -1123,6 +1163,11 @@ iframe {
 #busSectionCopy,
 #busModalDescription {
   white-space: pre-line;
+}
+
+.bus-copy-intro {
+  display: block;
+  margin-bottom: 18px;
 }
 
 .contact-column h4 {

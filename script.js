@@ -122,8 +122,18 @@ const CONFIG = {
     parking: '부평우림 라이온스밸리 3시간 무료 (인천시 부평구 부평대로 283), 지하 2층 A동 기둥번호(A05) 주변 주차 후 갈산역 만남의광장 이동 후 갈산역 2번 출구로 나오세요.',
     subway: '인천지하철 갈산역 2번 출구로 나오세요.',
     bus: ' ',
-    charterBus:
-      '포항 -> 인천\n -출발 시간 및 장소: 9시 20분 효자교회 주차장, 9시 30분 포항공과대학교 C5 앞\n\n인천 -> 포항\n -출발 시간 및 장소: 18시 예식장 1층',
+    charterBus: [
+      {
+        title: '포항 → 인천',
+        description: '출발 시간 및 장소: 9시 20분 효자교회 주차장, 9시 30분 포항공과대학교 C5 앞',
+        image: '/images/bus_pohang.png',
+      },
+      {
+        title: '인천 → 포항',
+        description: '출발 시간 및 장소: 18시 예식장 1층',
+        image: '/images/map.jpg',
+      },
+    ],
   },
   venueGuide: {
     items: [
@@ -298,14 +308,20 @@ function renderHero() {
 function renderBusSurveyCopy() {
   const busSectionCopy = document.getElementById('busSectionCopy');
   const busModalDescription = document.getElementById('busModalDescription');
-  const busCopy = [CONFIG.busSurvey.sectionCopy, CONFIG.location.charterBus].filter(Boolean).join('\n\n');
+  const charterBusMarkup = renderCharterBusMarkup('bus');
 
   if (busSectionCopy) {
-    busSectionCopy.textContent = busCopy;
+    busSectionCopy.innerHTML = `
+      <span class="bus-copy-intro">${escapeHtml(CONFIG.busSurvey.sectionCopy)}</span>
+      ${charterBusMarkup}
+    `;
   }
 
   if (busModalDescription) {
-    busModalDescription.textContent = busCopy;
+    busModalDescription.innerHTML = `
+      <span class="bus-copy-intro">${escapeHtml(CONFIG.busSurvey.sectionCopy)}</span>
+      ${charterBusMarkup}
+    `;
   }
 }
 
@@ -550,7 +566,7 @@ function renderLocation() {
   parkingImage.innerHTML = createImageMarkup(CONFIG.location.parkingImage, '주차 안내 이미지', '주차 안내 이미지를 추가하면 표시됩니다.');
   parkingInfo.textContent = CONFIG.location.parking;
   transportInfo.textContent = [CONFIG.location.subway, CONFIG.location.bus].filter(Boolean).join(' / ');
-  charterBusInfo.textContent = CONFIG.location.charterBus;
+  charterBusInfo.innerHTML = renderCharterBusMarkup('location');
 
   if (isPlaceholderValue(CONFIG.location.embedUrl)) {
     mapFrame.innerHTML = `
@@ -568,6 +584,36 @@ function renderLocation() {
     link.href = href;
     link.classList.toggle('is-disabled', href === '#');
   });
+}
+
+function renderCharterBusMarkup(variant = 'location') {
+  if (!Array.isArray(CONFIG.location.charterBus) || !CONFIG.location.charterBus.length) {
+    return '';
+  }
+
+  return `
+    <div class="charter-bus-list charter-bus-list--${variant}">
+      ${CONFIG.location.charterBus
+        .map((item) => {
+          const imageMarkup = createImageMarkup(
+            item.image,
+            `${item.title} 안내 이미지`,
+            `${item.title} 안내 이미지를 추가하면 표시됩니다.`,
+          );
+
+          return `
+            <div class="charter-bus-item">
+              <p class="charter-bus-item__title">${escapeHtml(item.title)}</p>
+              <p class="charter-bus-item__description">${escapeHtml(item.description)}</p>
+              <div class="charter-bus-item__image">
+                ${imageMarkup}
+              </div>
+            </div>
+          `;
+        })
+        .join('')}
+    </div>
+  `;
 }
 
 function renderVenueGuide() {
