@@ -126,7 +126,7 @@ const CONFIG = {
     charterBus: [
       {
         title: '포항 → 인천',
-        description: '출발 시간 및 장소: 9시 20분 효자교회 주차장, 9시 30분 포항공과대학교 동문',
+        description: '출발 시간 및 장소: 9시 효자교회 주차장, 9시 10분 포항공과대학교 동문',
         image: '/images/bus_pohang.png',
       },
       {
