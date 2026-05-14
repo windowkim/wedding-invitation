@@ -314,9 +314,9 @@ iframe {
 .invitation-message__verse {
   padding: 18px 16px;
   border-radius: 20px;
-  background: #cf9bad;
+  background: #e6b7c8;
   border: 1px solid rgba(255, 255, 255, 0.28);
-  box-shadow: 0 16px 32px rgba(207, 155, 173, 0.24);
+  box-shadow: 0 16px 32px rgba(230, 183, 200, 0.24);
   text-align: left;
 }
 
