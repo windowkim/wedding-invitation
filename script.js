@@ -509,7 +509,7 @@ function renderCalendar() {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   weekdays.innerHTML = WEEK_DAYS.map((day) => `<div>${day}</div>`).join('');
-  title.textContent = `${year}년 ${month + 1}월`;
+  title.textContent = `${month + 1}월`;
   helper.textContent = weddingDate ? '' : '날짜 입력 후 하이라이트됩니다';
 
   const cells = [];
