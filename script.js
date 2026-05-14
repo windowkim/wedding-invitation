@@ -70,6 +70,7 @@ const CONFIG = {
   },
   wedding: {
     displayDate: '2026년 8월 29일 토요일 오후 3시',
+    countdownHeart: '♥',
     year: '2026',
     month: '8',
     day: '29',
@@ -537,7 +538,7 @@ function renderCountdown() {
   const update = () => {
     if (!weddingDate) {
       date.textContent = CONFIG.wedding.displayDate;
-      message.textContent = `${CONFIG.couple.groom.name} ❤️ ${CONFIG.couple.bride.name}의 결혼식이 [X]일 남았습니다`;
+      message.textContent = `${CONFIG.couple.groom.name} ${CONFIG.wedding.countdownHeart} ${CONFIG.couple.bride.name}의 결혼식까지 [X]일 [X]시간 [X]분 [X]초`;
       live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시`; 
       return;
     }
@@ -550,7 +551,7 @@ function renderCountdown() {
     const seconds = Math.floor((safeDiff / 1000) % 60);
 
     date.textContent = CONFIG.wedding.displayDate;
-    message.textContent = `${CONFIG.couple.groom.name} ❤️ ${CONFIG.couple.bride.name}의 결혼식이 ${days}일 남았습니다`;
+    message.textContent = `${CONFIG.couple.groom.name} ${CONFIG.wedding.countdownHeart} ${CONFIG.couple.bride.name}의 결혼식까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
     live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
   };
 
