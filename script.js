@@ -532,14 +532,12 @@ function renderCalendar() {
 function renderCountdown() {
   const date = document.getElementById('countdownDate');
   const message = document.getElementById('countdownMessage');
-  const live = document.getElementById('countdownLive');
   const weddingDate = getWeddingDate();
 
   const update = () => {
     if (!weddingDate) {
       date.textContent = CONFIG.wedding.displayDate;
       message.textContent = `${CONFIG.couple.groom.name} ${CONFIG.wedding.countdownHeart} ${CONFIG.couple.bride.name}의 결혼식까지 [X]일 [X]시간 [X]분 [X]초`;
-      live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시`; 
       return;
     }
 
@@ -552,7 +550,6 @@ function renderCountdown() {
 
     date.textContent = CONFIG.wedding.displayDate;
     message.textContent = `${CONFIG.couple.groom.name} ${CONFIG.wedding.countdownHeart} ${CONFIG.couple.bride.name}의 결혼식까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
-    live.textContent = `${CONFIG.wedding.year}년 ${CONFIG.wedding.month}월 ${CONFIG.wedding.day}일 ${CONFIG.wedding.hour}시까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
   };
 
   update();
