@@ -1100,16 +1100,65 @@ function bindGalleryLightbox() {
   const galleryModal = document.getElementById('galleryModal');
   const galleryModalImage = document.getElementById('galleryModalImage');
   const galleryModalCaption = document.getElementById('galleryModalCaption');
+  const galleryModalMedia = galleryModal.querySelector('.gallery-modal-media');
+  const galleryModalPrevButton = document.getElementById('galleryModalPrevButton');
+  const galleryModalNextButton = document.getElementById('galleryModalNextButton');
   const galleryTrack = document.getElementById('galleryTrack');
+  const galleryItems = CONFIG.gallery.images
+    .filter((item) => item && item.src && !isPlaceholderValue(item.src))
+    .map((item) => ({
+      src: resolveAssetUrl(item.src),
+      alt: item.alt || '갤러리 이미지',
+      caption: item.caption || '',
+    }));
+  let activeIndex = 0;
+  let touchStartX = 0;
+
+  const showGalleryImage = (index) => {
+    if (!galleryItems.length) return;
+
+    activeIndex = (index + galleryItems.length) % galleryItems.length;
+    const item = galleryItems[activeIndex];
+    const label = item.caption || item.alt;
+
+    galleryModalImage.src = item.src;
+    galleryModalImage.alt = label;
+    galleryModalCaption.textContent = item.caption;
+  };
+
+  const moveGalleryImage = (direction) => {
+    showGalleryImage(activeIndex + direction);
+  };
 
   galleryTrack.addEventListener('click', (event) => {
     const trigger = event.target.closest('[data-gallery-src]');
     if (!trigger) return;
 
-    galleryModalImage.src = trigger.dataset.gallerySrc || '';
-    galleryModalImage.alt = trigger.dataset.galleryAlt || '갤러리 이미지';
-    galleryModalCaption.textContent = trigger.dataset.galleryAlt || '';
+    const requestedSrc = trigger.dataset.gallerySrc || '';
+    const nextIndex = galleryItems.findIndex((item) => item.src === requestedSrc);
+    showGalleryImage(nextIndex >= 0 ? nextIndex : 0);
     openModal(galleryModal);
+  });
+
+  galleryModalPrevButton.addEventListener('click', () => moveGalleryImage(-1));
+  galleryModalNextButton.addEventListener('click', () => moveGalleryImage(1));
+
+  galleryModalMedia.addEventListener('touchstart', (event) => {
+    touchStartX = event.changedTouches[0]?.clientX || 0;
+  }, { passive: true });
+
+  galleryModalMedia.addEventListener('touchend', (event) => {
+    const touchEndX = event.changedTouches[0]?.clientX || 0;
+    const distance = touchEndX - touchStartX;
+
+    if (Math.abs(distance) < 48) return;
+    moveGalleryImage(distance > 0 ? -1 : 1);
+  }, { passive: true });
+
+  document.addEventListener('keydown', (event) => {
+    if (!galleryModal.classList.contains('is-open')) return;
+    if (event.key === 'ArrowLeft') moveGalleryImage(-1);
+    if (event.key === 'ArrowRight') moveGalleryImage(1);
   });
 }
 
