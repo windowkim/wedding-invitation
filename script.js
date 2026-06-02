@@ -160,12 +160,12 @@ const CONFIG = {
     groomSideLabel: '신랑측',
     brideSideLabel: '신부측',
     groom: [
-      { holder: '김창욱', bank: '<은행명>', number: '<계좌 정보>' },
-      { holder: '김준식', bank: '<은행명>', number: '<계좌 정보>' },
-      { holder: '방은정', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '김창욱', bank: '토스뱅크', number: '1000-0605-9554' },
+      { holder: '김준식', bank: '새마을금고', number: '9002-1589-0014-6' },
+      { holder: '방은정', bank: '우리은행', number: '1002-532-471456' },
     ],
     bride: [
-      { holder: '한진주', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '한진주', bank: '신협', number: '137-004-270260' },
       { holder: '한상우', bank: '<은행명>', number: '<계좌 정보>' },
       { holder: '유은영', bank: '<은행명>', number: '<계좌 정보>' },
     ],
