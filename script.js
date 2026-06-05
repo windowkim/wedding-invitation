@@ -166,8 +166,8 @@ const CONFIG = {
     ],
     bride: [
       { holder: '한진주', bank: '신협', number: '137-004-270260' },
-      { holder: '한상우', bank: '<은행명>', number: '<계좌 정보>' },
-      { holder: '유은영', bank: '<은행명>', number: '<계좌 정보>' },
+      { holder: '한상우', bank: '신한은행', number: '110-506-962378' },
+      { holder: '유은영', bank: '국민은행', number: '245-24-0149-055' },
     ],
   },
   busSurvey: {
