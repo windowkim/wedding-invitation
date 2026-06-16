@@ -1197,6 +1197,32 @@ iframe {
   z-index: 2;
 }
 
+.bus-modal-close {
+  position: sticky;
+  top: 0;
+  right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: 36px;
+  margin: -14px 0 8px auto;
+  padding: 0 14px;
+  border: 1px solid rgba(242, 184, 181, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--accent-strong);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 8px 18px rgba(118, 104, 115, 0.12);
+}
+
+.bus-modal-close:hover,
+.bus-modal-close:active {
+  transform: none;
+}
+
 .contact-columns {
   position: relative;
   z-index: 1;
