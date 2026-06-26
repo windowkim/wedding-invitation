@@ -3,7 +3,8 @@ const CONFIG = {
     title: '김창욱 · 한진주 모바일 청첩장',
     publicUrl: 'https://windowkim.github.io/wedding-invitation/',
     heroImage: '/images/main.jpeg',
-    shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/main.jpeg',
+    assetVersion: '20260627-studio-gallery',
+    shareImageUrl: 'https://windowkim.github.io/wedding-invitation/images/main.jpeg?v=20260627-studio-gallery',
     backgroundMusic: '/bgms/the_day_we_met_first_swing_ver.mp3',
     backgroundMusicLabel: '우리가 처음 만난 날\n(김헌 님이 선물해 주신 곡)',
     heroKicker: 'Wedding Invitation',
@@ -124,6 +125,24 @@ const CONFIG = {
       { src: '/images/gallery/24.jpeg', alt: '갤러리 사진' },
       { src: '/images/gallery/25.jpeg', alt: '갤러리 사진' },
       { src: '/images/gallery/26.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/27.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/28.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/29.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/30.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/31.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/32.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/33.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/34.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/35.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/36.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/37.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/38.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/39.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/40.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/41.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/42.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/43.jpeg', alt: '갤러리 사진' },
+      { src: '/images/gallery/44.jpeg', alt: '갤러리 사진' },
     ],
   },
   location: {
@@ -232,12 +251,21 @@ function resolveAssetUrl(value) {
     return value;
   }
 
-  if (/^https?:\/\//i.test(value)) {
-    return value;
-  }
+  const version = CONFIG.site.assetVersion;
+  const appendVersion = (url) => {
+    if (!version) return url;
+    url.searchParams.set('v', version);
+    return url.toString();
+  };
 
   if (value.startsWith('/')) {
-    return new URL(value.replace(/^\//, ''), CONFIG.site.publicUrl).toString();
+    const isLocalPreview = ['localhost', '127.0.0.1', '0.0.0.0'].includes(window.location.hostname);
+    const baseUrl = isLocalPreview ? `${window.location.origin}/` : CONFIG.site.publicUrl;
+    return appendVersion(new URL(value.replace(/^\//, ''), baseUrl));
+  }
+
+  if (/^https?:\/\//i.test(value)) {
+    return appendVersion(new URL(value));
   }
 
   return value;
